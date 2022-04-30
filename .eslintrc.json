@@ -18,6 +18,7 @@
         "eslint-plugin-import-helpers"
     ],
     "rules": {
+        "@typescript-eslint/no-namespace": "off",
         "quotes": ["error", "double"],
         "camelcase": "off",
         "import/no-unresolved": "error",
