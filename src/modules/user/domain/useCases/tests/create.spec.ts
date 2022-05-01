@@ -43,7 +43,7 @@ function makeEncrypterAdapter(): IEncrypterAdapter {
 function makeCreateUserRepositoryStub(): ICreateUserRepository {
   class CreateUserRepositoryStub implements ICreateUserRepository {
     create(params: CreateUserRepositoryDTO.Params): Promise<User> {
-      return Promise.resolve(fakeUser);
+      return Promise.resolve({ ...fakeUser, password: 'encrypted_password' });
     }
   }
 
@@ -138,6 +138,20 @@ describe('Create user use case', () => {
     expect(createUserRepositorySpy).toHaveBeenCalledWith({
       ...validParams,
       password: 'encrypted_password',
+    });
+  });
+
+  test('Should return a created user', async () => {
+    const { sut } = makeSut();
+    const response = await sut.execute(validParams);
+    expect(response).toEqual({
+      email: 'any_mail@mail.com',
+      name: 'any_name',
+      bio: 'any_bio',
+      nickname: 'any_nickname',
+      password: 'encrypted_password',
+      githubAccount: 'any_github_account',
+      specialties: ['any_specialty_1', 'any_specialty_2'],
     });
   });
 });
