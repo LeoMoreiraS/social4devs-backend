@@ -19,7 +19,7 @@
     ],
     "rules": {
         "@typescript-eslint/no-namespace": "off",
-        "quotes": ["error", "double"],
+        "quotes": ["error", "single"],
         "camelcase": "off",
         "import/no-unresolved": "error",
         "@typescript-eslint/naming-convention": [
