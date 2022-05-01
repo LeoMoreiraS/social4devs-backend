@@ -3,14 +3,17 @@
     "target": "es2016",
     "module": "commonjs",
     "moduleResolution": "node",
-    "baseUrl": "./",
+    "rootDir": "./",
+    "baseUrl": "./src",
     "paths": {
-      "@user": ["src/user"],
+      "@user/*": ["modules/user/*"],
+      "@shared/*": ["shared/*"]
     },
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "strictPropertyInitialization": false,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "resolveJsonModule": true
   }
 }
