@@ -9,11 +9,11 @@ import { IFindUserByGitHubRepository } from '@user/domain/repositories/find-by-g
 import { User } from '../../entities/user';
 import { CreateUserUseCase } from '../create';
 import { fakeUser } from './mocks/fake-user';
-// TODO fix promises
+
 function makeFindUserByEmailRepositoryStub(): IFindUserByEmailRepository {
   class FindUserByEmailRepositoryStub implements IFindUserByEmailRepository {
-    async findByEmail(email: string): Promise<User | null> {
-      return null;
+    findByEmail(email: string): Promise<User | null> {
+      return Promise.resolve(null);
     }
   }
 
@@ -22,8 +22,8 @@ function makeFindUserByEmailRepositoryStub(): IFindUserByEmailRepository {
 
 function makeFindUserByGitHubRepositoryStub(): IFindUserByGitHubRepository {
   class FindUserByGitHubRepositoryStub implements IFindUserByGitHubRepository {
-    async findByGitHub(githubAccount: string): Promise<User | null> {
-      return null;
+    findByGitHub(githubAccount: string): Promise<User | null> {
+      return Promise.resolve(null);
     }
   }
 
@@ -32,8 +32,8 @@ function makeFindUserByGitHubRepositoryStub(): IFindUserByGitHubRepository {
 
 function makeEncrypterAdapter(): IEncrypterAdapter {
   class EncrypterAdapterStub implements IEncrypterAdapter {
-    async encrypt(password: string): Promise<string> {
-      return 'encrypted_password';
+    encrypt(password: string): Promise<string> {
+      return Promise.resolve('encrypted_password');
     }
   }
 
@@ -42,8 +42,8 @@ function makeEncrypterAdapter(): IEncrypterAdapter {
 
 function makeCreateUserRepositoryStub(): ICreateUserRepository {
   class CreateUserRepositoryStub implements ICreateUserRepository {
-    async create(params: CreateUserRepositoryDTO.Params): Promise<User> {
-      return fakeUser;
+    create(params: CreateUserRepositoryDTO.Params): Promise<User> {
+      return Promise.resolve(fakeUser);
     }
   }
 
@@ -88,7 +88,7 @@ const validParams = {
   specialties: ['any_specialty_1', 'any_specialty_2'],
 };
 
-describe('Create user', () => {
+describe('Create user use case', () => {
   test('Should call FindUserByEmailRepository with correct email', async () => {
     const { sut, findUserByEmailRepositoryStub } = makeSut();
     const findUserByEmailRepositorySpy = jest.spyOn(findUserByEmailRepositoryStub, 'findByEmail');
