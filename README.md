@@ -7,5 +7,5 @@
 - [x] Should not create a user with existing githubAccount
 - [x] Should encrypt user password
 - [x] Should create a user
-- [ ] Should return the created user
+- [x] Should return the created user
  
