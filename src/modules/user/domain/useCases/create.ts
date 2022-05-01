@@ -2,6 +2,7 @@ import { AlreadyExistsError } from '@shared/errors/already-exists';
 
 import { IEncrypterAdapter } from '../adapters/encrypter';
 import { User } from '../entities/user';
+import { ICreateUserRepository } from '../repositories/create';
 import { IFindUserByEmailRepository } from '../repositories/find-by-email';
 import { IFindUserByGitHubRepository } from '../repositories/find-by-github';
 import { CreateUserDTO, ICreateUserUseCase } from './interfaces/create';
@@ -10,7 +11,8 @@ export class CreateUserUseCase implements ICreateUserUseCase {
   constructor(
     private readonly findUserByEmailRepository: IFindUserByEmailRepository,
     private readonly findUserByGitHubRepository: IFindUserByGitHubRepository,
-    private readonly encrypterAdapter: IEncrypterAdapter
+    private readonly encrypterAdapter: IEncrypterAdapter,
+    private readonly createUserRepository: ICreateUserRepository
   ) {}
 
   async execute({
@@ -21,7 +23,7 @@ export class CreateUserUseCase implements ICreateUserUseCase {
     password,
     githubAccount,
     specialties,
-  }: CreateUserDTO.Params): Promise<User> {
+  }: CreateUserDTO.Params): Promise<CreateUserDTO.Result> {
     const emailAlreadyExists = await this.findUserByEmailRepository.findByEmail(email);
 
     if (emailAlreadyExists) {
@@ -36,7 +38,17 @@ export class CreateUserUseCase implements ICreateUserUseCase {
       throw new AlreadyExistsError(`GitHub account "${githubAccount}" already exists`);
     }
 
-    const encryptedPassword = this.encrypterAdapter.encrypt(password);
+    const encryptedPassword = await this.encrypterAdapter.encrypt(password);
+
+    const user = await this.createUserRepository.create({
+      email,
+      name,
+      bio,
+      nickname,
+      password: encryptedPassword,
+      githubAccount,
+      specialties,
+    });
 
     return null as unknown as User;
   }
