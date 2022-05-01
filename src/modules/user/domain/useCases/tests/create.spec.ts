@@ -1,7 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { AlreadyExistsError } from '@shared/errors/already-exists';
+
 import { User } from '../../entities/user';
 import { IFindUserByEmailRepository } from '../../repositories/find';
 import { CreateUserUseCase } from '../create';
+import { fakeUser } from './mocks/fake-user';
 
 function makeFindUserByEmailRepositoryStub(): IFindUserByEmailRepository {
   class FindUserByEmailRepositoryStub implements IFindUserByEmailRepository {
@@ -35,10 +38,17 @@ const validParams = {
 };
 
 describe('Create user', () => {
-  test('Should call FindUserByEmailRepository with correct email', async () => {
+  test('Should call FindUserByEmailRepository with correct values', async () => {
     const { sut, findUserByEmailRepositoryStub } = makeSut();
     const findUserByEmailRepositorySpy = jest.spyOn(findUserByEmailRepositoryStub, 'findByEmail');
     await sut.execute(validParams);
     expect(findUserByEmailRepositorySpy).toHaveBeenCalledWith('any_mail@mail.com');
+  });
+
+  test('Should throw AlreadyExitsError if email already exists', async () => {
+    const { sut, findUserByEmailRepositoryStub } = makeSut();
+    jest.spyOn(findUserByEmailRepositoryStub, 'findByEmail').mockResolvedValueOnce(fakeUser);
+    const sutPromise = sut.execute(validParams);
+    await expect(sutPromise).rejects.toThrow(new AlreadyExistsError('Email \'any_mail@mail.com\' already exists'));
   });
 });
