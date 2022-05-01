@@ -50,6 +50,6 @@ export class CreateUserUseCase implements ICreateUserUseCase {
       specialties,
     });
 
-    return null as unknown as User;
+    return user;
   }
 }
