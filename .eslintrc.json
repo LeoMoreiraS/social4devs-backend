@@ -25,7 +25,7 @@
         "quotes": ["error", "single"],
         "prettier/prettier": [
             "error", 
-            { "singleQuote": true }
+            { "singleQuote": true, "printWidth": 100 }
         ],
         "@typescript-eslint/no-namespace": "off",
         "camelcase": "off",
