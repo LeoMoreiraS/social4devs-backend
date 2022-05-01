@@ -33,7 +33,7 @@ const validParams = {
   bio: 'any_bio',
   nickname: '',
   password: '',
-  github_account: '',
+  githubAccount: 'any_github_account',
   specialties: ['', ''],
 };
 

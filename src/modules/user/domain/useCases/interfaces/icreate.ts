@@ -7,7 +7,7 @@ export namespace CreateUserDTO {
     bio: string;
     nickname: string;
     password: string;
-    github_account: string;
+    githubAccount: string;
     specialties: string[];
   }
 
@@ -21,7 +21,7 @@ export interface ICreateUserUseCase {
     bio,
     nickname,
     password,
-    github_account,
+    githubAccount,
     specialties,
   }: CreateUserDTO.Params): Promise<CreateUserDTO.Result>;
 }

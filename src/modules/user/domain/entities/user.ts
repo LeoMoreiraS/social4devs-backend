@@ -5,7 +5,7 @@ export class User {
   nickname: string;
   password: string;
   // avatar
-  github_account: string;
+  githubAccount: string;
   specialties: string[];
   createdAt: Date;
   updatedAt: Date;

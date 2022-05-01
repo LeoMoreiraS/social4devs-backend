@@ -13,7 +13,7 @@ export class CreateUserUseCase implements ICreateUserUseCase {
     bio,
     nickname,
     password,
-    github_account,
+    githubAccount,
     specialties,
   }: CreateUserDTO.Params): Promise<User> {
     const emailAlreadyExists = await this.findUserByEmailRepository.findByEmail(email);

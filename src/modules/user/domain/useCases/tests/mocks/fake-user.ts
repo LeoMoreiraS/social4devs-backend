@@ -6,6 +6,6 @@ export const fakeUser = new User({
   bio: 'any_bio',
   nickname: 'any_nick',
   password: 'any_password',
-  github_account: 'any_github_account',
+  githubAccount: 'any_github_account',
   specialties: ['any_specialty_1', 'any_specialty_2'],
 });
