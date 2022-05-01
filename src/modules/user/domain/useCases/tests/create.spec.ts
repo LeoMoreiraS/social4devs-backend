@@ -36,10 +36,7 @@ interface SutTypes {
 function makeSut(): SutTypes {
   const findUserByEmailRepositoryStub = makeFindUserByEmailRepositoryStub();
   const findUserByGitHubRepositoryStub = makeFindUserByGitHubRepositoryStub();
-  const sut = new CreateUserUseCase(
-    findUserByEmailRepositoryStub,
-    findUserByGitHubRepositoryStub
-  );
+  const sut = new CreateUserUseCase(findUserByEmailRepositoryStub, findUserByGitHubRepositoryStub);
   return { sut, findUserByEmailRepositoryStub, findUserByGitHubRepositoryStub };
 }
 
@@ -56,21 +53,14 @@ const validParams = {
 describe('Create user', () => {
   test('Should call FindUserByEmailRepository with correct values', async () => {
     const { sut, findUserByEmailRepositoryStub } = makeSut();
-    const findUserByEmailRepositorySpy = jest.spyOn(
-      findUserByEmailRepositoryStub,
-      'findByEmail'
-    );
+    const findUserByEmailRepositorySpy = jest.spyOn(findUserByEmailRepositoryStub, 'findByEmail');
     await sut.execute(validParams);
-    expect(findUserByEmailRepositorySpy).toHaveBeenCalledWith(
-      'any_mail@mail.com'
-    );
+    expect(findUserByEmailRepositorySpy).toHaveBeenCalledWith('any_mail@mail.com');
   });
 
   test('Should throw AlreadyExitsError if email already exists', async () => {
     const { sut, findUserByEmailRepositoryStub } = makeSut();
-    jest
-      .spyOn(findUserByEmailRepositoryStub, 'findByEmail')
-      .mockResolvedValueOnce(fakeUser);
+    jest.spyOn(findUserByEmailRepositoryStub, 'findByEmail').mockResolvedValueOnce(fakeUser);
     const sutPromise = sut.execute(validParams);
     await expect(sutPromise).rejects.toThrow(
       new AlreadyExistsError('Email "any_mail@mail.com" already exists')
@@ -84,21 +74,15 @@ describe('Create user', () => {
       'findByGitHub'
     );
     await sut.execute(validParams);
-    expect(findUserByGitHubRepositorySpy).toHaveBeenCalledWith(
-      'any_github_account'
-    );
+    expect(findUserByGitHubRepositorySpy).toHaveBeenCalledWith('any_github_account');
   });
 
   test('Should throw AlreadyExitsError if github account already exists', async () => {
     const { sut, findUserByGitHubRepositoryStub } = makeSut();
-    jest
-      .spyOn(findUserByGitHubRepositoryStub, 'findByGitHub')
-      .mockResolvedValueOnce(fakeUser);
+    jest.spyOn(findUserByGitHubRepositoryStub, 'findByGitHub').mockResolvedValueOnce(fakeUser);
     const sutPromise = sut.execute(validParams);
     await expect(sutPromise).rejects.toThrow(
-      new AlreadyExistsError(
-        'GitHub account "any_github_account" already exists'
-      )
+      new AlreadyExistsError('GitHub account "any_github_account" already exists')
     );
   });
 });

@@ -9,9 +9,9 @@ export namespace CreateUserDTO {
     password: string;
     githubAccount: string;
     specialties: string[];
-  }
+  };
 
-  export type Result = User
+  export type Result = User;
 }
 
 export interface ICreateUserUseCase {

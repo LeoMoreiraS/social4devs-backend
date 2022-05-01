@@ -20,21 +20,18 @@ export class CreateUserUseCase implements ICreateUserUseCase {
     githubAccount,
     specialties,
   }: CreateUserDTO.Params): Promise<User> {
-    const emailAlreadyExists = await this.findUserByEmailRepository.findByEmail(
-      email
-    );
+    const emailAlreadyExists = await this.findUserByEmailRepository.findByEmail(email);
 
     if (emailAlreadyExists) {
       throw new AlreadyExistsError(`Email "${email}" already exists`);
     }
 
-    const githubAccountAlreadyExists =
-      await this.findUserByGitHubRepository.findByGitHub(githubAccount);
+    const githubAccountAlreadyExists = await this.findUserByGitHubRepository.findByGitHub(
+      githubAccount
+    );
 
     if (githubAccountAlreadyExists) {
-      throw new AlreadyExistsError(
-        `GitHub account "${githubAccount}" already exists`
-      );
+      throw new AlreadyExistsError(`GitHub account "${githubAccount}" already exists`);
     }
 
     return null as unknown as User;
