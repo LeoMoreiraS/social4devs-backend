@@ -1,7 +1,6 @@
 import { AlreadyExistsError } from '@shared/errors/already-exists';
 
 import { IEncrypterAdapter } from '../adapters/encrypter';
-import { User } from '../entities/user';
 import { ICreateUserRepository } from '../repositories/create';
 import { IFindUserByEmailRepository } from '../repositories/find-by-email';
 import { IFindUserByGitHubRepository } from '../repositories/find-by-github';
