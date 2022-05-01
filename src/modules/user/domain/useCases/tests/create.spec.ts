@@ -2,9 +2,12 @@
 import { AlreadyExistsError } from '@shared/errors/already-exists';
 
 import { IEncrypterAdapter } from '@user/domain/adapters/encrypter';
-import { CreateUserRepositoryDTO, ICreateUserRepository } from '@user/domain/repositories/create';
-import { IFindUserByEmailRepository } from '@user/domain/repositories/find-by-email';
-import { IFindUserByGitHubRepository } from '@user/domain/repositories/find-by-github';
+import {
+  CreateUserRepositoryDTO,
+  ICreateUserRepository,
+} from '@user/domain/repositories/user/create';
+import { IFindUserByEmailRepository } from '@user/domain/repositories/user/find-by-email';
+import { IFindUserByGitHubRepository } from '@user/domain/repositories/user/find-by-github';
 
 import { User } from '../../entities/user';
 import { CreateUserUseCase } from '../create';
