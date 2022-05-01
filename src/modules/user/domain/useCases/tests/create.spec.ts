@@ -1,13 +1,27 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { User } from '../../entities/user';
+import { IFindUserByEmailRepository } from '../../repositories/find';
 import { CreateUserUseCase } from '../create';
 
+function makeFindUserByEmailRepositoryStub(): IFindUserByEmailRepository {
+  class FindUserByEmailRepositoryStub implements IFindUserByEmailRepository {
+    async findByEmail(email: string): Promise<User | null> {
+      return null;
+    }
+  }
+
+  return new FindUserByEmailRepositoryStub();
+}
+
 interface SutTypes {
+  findUserByEmailRepositoryStub: IFindUserByEmailRepository;
   sut: CreateUserUseCase;
 }
 
 function makeSut(): SutTypes {
-  const sut = new CreateUserUseCase();
-  return { sut };
+  const findUserByEmailRepositoryStub = makeFindUserByEmailRepositoryStub();
+  const sut = new CreateUserUseCase(findUserByEmailRepositoryStub);
+  return { sut, findUserByEmailRepositoryStub };
 }
 
 const validParams = {
@@ -21,8 +35,10 @@ const validParams = {
 };
 
 describe('Create user', () => {
-  test('Should', async () => {
-    const { sut } = makeSut();
+  test('Should call FindUserByEmailRepository with correct email', async () => {
+    const { sut, findUserByEmailRepositoryStub } = makeSut();
+    const findUserByEmailRepositorySpy = jest.spyOn(findUserByEmailRepositoryStub, 'findByEmail');
     await sut.execute(validParams);
+    expect(findUserByEmailRepositorySpy).toHaveBeenCalledWith('any_mail@mail.com');
   });
 });
