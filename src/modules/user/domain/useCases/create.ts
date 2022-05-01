@@ -31,6 +31,12 @@ export class CreateUserUseCase implements ICreateUserUseCase {
     const githubAccountAlreadyExists =
       await this.findUserByGitHubRepository.findByGitHub(githubAccount);
 
+    if (githubAccountAlreadyExists) {
+      throw new AlreadyExistsError(
+        `GitHub account "${githubAccount}" already exists`
+      );
+    }
+
     return null as unknown as User;
   }
 }
