@@ -88,4 +88,17 @@ describe('Create user', () => {
       'any_github_account'
     );
   });
+
+  test('Should throw AlreadyExitsError if github account already exists', async () => {
+    const { sut, findUserByGitHubRepositoryStub } = makeSut();
+    jest
+      .spyOn(findUserByGitHubRepositoryStub, 'findByGitHub')
+      .mockResolvedValueOnce(fakeUser);
+    const sutPromise = sut.execute(validParams);
+    await expect(sutPromise).rejects.toThrow(
+      new AlreadyExistsError(
+        'GitHub account "any_github_account" already exists'
+      )
+    );
+  });
 });
