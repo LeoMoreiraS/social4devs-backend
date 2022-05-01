@@ -2,7 +2,7 @@
 import { AlreadyExistsError } from '@shared/errors/already-exists';
 
 import { User } from '../../entities/user';
-import { IFindUserByEmailRepository } from '../../repositories/find';
+import { IFindUserByEmailRepository } from '../../repositories/find-by-email';
 import { CreateUserUseCase } from '../create';
 import { fakeUser } from './mocks/fake-user';
 
