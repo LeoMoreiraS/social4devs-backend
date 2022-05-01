@@ -6,6 +6,6 @@
 - [x] Should not create a user with existing email
 - [x] Should not create a user with existing githubAccount
 - [x] Should encrypt user password
-- [ ] Should call CreateUserRepository with correct values
-- [ ] Should return a created user
+- [x] Should create a user
+- [ ] Should return the created user
  
