@@ -3,9 +3,9 @@
 ## Business Rules
 
 ### Create user
-- [ ] Should not create a user with existing email
-- [ ] Should not create a user with existing githubAccount
-- [ ] Should call CreateUserRepository with correct values
+- [x] Should not create a user with existing email
+- [x] Should not create a user with existing githubAccount
 - [ ] Should encrypt user password
+- [ ] Should call CreateUserRepository with correct values
 - [ ] Should return a created user
  
