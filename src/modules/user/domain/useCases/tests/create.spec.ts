@@ -2,21 +2,22 @@
 import { AlreadyExistsError } from '@shared/errors/already-exists';
 
 import { IEncrypterAdapter } from '@user/domain/adapters/encrypter';
+import { CreateUserRepositoryDTO, ICreateUserRepository } from '@user/domain/repositories/create';
 import { IFindUserByEmailRepository } from '@user/domain/repositories/find-by-email';
 import { IFindUserByGitHubRepository } from '@user/domain/repositories/find-by-github';
 
 import { User } from '../../entities/user';
 import { CreateUserUseCase } from '../create';
 import { fakeUser } from './mocks/fake-user';
-
-function makeEncrypterAdapter(): IEncrypterAdapter {
-  class EncrypterAdapterStub implements IEncrypterAdapter {
-    async encrypt(password: string): Promise<string> {
-      return 'encrypted_password';
+// TODO fix promises
+function makeFindUserByEmailRepositoryStub(): IFindUserByEmailRepository {
+  class FindUserByEmailRepositoryStub implements IFindUserByEmailRepository {
+    async findByEmail(email: string): Promise<User | null> {
+      return null;
     }
   }
 
-  return new EncrypterAdapterStub();
+  return new FindUserByEmailRepositoryStub();
 }
 
 function makeFindUserByGitHubRepositoryStub(): IFindUserByGitHubRepository {
@@ -29,43 +30,62 @@ function makeFindUserByGitHubRepositoryStub(): IFindUserByGitHubRepository {
   return new FindUserByGitHubRepositoryStub();
 }
 
-function makeFindUserByEmailRepositoryStub(): IFindUserByEmailRepository {
-  class FindUserByEmailRepositoryStub implements IFindUserByEmailRepository {
-    async findByEmail(email: string): Promise<User | null> {
-      return null;
+function makeEncrypterAdapter(): IEncrypterAdapter {
+  class EncrypterAdapterStub implements IEncrypterAdapter {
+    async encrypt(password: string): Promise<string> {
+      return 'encrypted_password';
     }
   }
 
-  return new FindUserByEmailRepositoryStub();
+  return new EncrypterAdapterStub();
+}
+
+function makeCreateUserRepositoryStub(): ICreateUserRepository {
+  class CreateUserRepositoryStub implements ICreateUserRepository {
+    async create(params: CreateUserRepositoryDTO.Params): Promise<User> {
+      return fakeUser;
+    }
+  }
+
+  return new CreateUserRepositoryStub();
 }
 
 interface SutTypes {
   findUserByEmailRepositoryStub: IFindUserByEmailRepository;
   findUserByGitHubRepositoryStub: IFindUserByGitHubRepository;
-  encypterAdapter: IEncrypterAdapter;
+  encypterAdapterStub: IEncrypterAdapter;
+  createUserRepositoryStub: ICreateUserRepository;
   sut: CreateUserUseCase;
 }
 
 function makeSut(): SutTypes {
   const findUserByEmailRepositoryStub = makeFindUserByEmailRepositoryStub();
   const findUserByGitHubRepositoryStub = makeFindUserByGitHubRepositoryStub();
-  const encypterAdapter = makeEncrypterAdapter();
+  const encypterAdapterStub = makeEncrypterAdapter();
+  const createUserRepositoryStub = makeCreateUserRepositoryStub();
   const sut = new CreateUserUseCase(
     findUserByEmailRepositoryStub,
     findUserByGitHubRepositoryStub,
-    encypterAdapter
+    encypterAdapterStub,
+    createUserRepositoryStub
   );
-  return { sut, findUserByEmailRepositoryStub, findUserByGitHubRepositoryStub, encypterAdapter };
+  return {
+    sut,
+    findUserByEmailRepositoryStub,
+    findUserByGitHubRepositoryStub,
+    encypterAdapterStub,
+    createUserRepositoryStub,
+  };
 }
 
 const validParams = {
   email: 'any_mail@mail.com',
   name: 'any_name',
   bio: 'any_bio',
-  nickname: '',
+  nickname: 'any_nickname',
   password: 'any_password',
   githubAccount: 'any_github_account',
-  specialties: ['', ''],
+  specialties: ['any_specialty_1', 'any_specialty_2'],
 };
 
 describe('Create user', () => {
@@ -105,9 +125,19 @@ describe('Create user', () => {
   });
 
   test('Should call EncrypterAdapter with correct password', async () => {
-    const { sut, encypterAdapter } = makeSut();
-    const encypterAdapterSpy = jest.spyOn(encypterAdapter, 'encrypt');
+    const { sut, encypterAdapterStub } = makeSut();
+    const encypterAdapterSpy = jest.spyOn(encypterAdapterStub, 'encrypt');
     await sut.execute(validParams);
     expect(encypterAdapterSpy).toHaveBeenCalledWith('any_password');
+  });
+
+  test('Should call CreateUserRepository with correct values', async () => {
+    const { sut, createUserRepositoryStub } = makeSut();
+    const createUserRepositorySpy = jest.spyOn(createUserRepositoryStub, 'create');
+    await sut.execute(validParams);
+    expect(createUserRepositorySpy).toHaveBeenCalledWith({
+      ...validParams,
+      password: 'encrypted_password',
+    });
   });
 });
