@@ -4,7 +4,7 @@ import { IEncrypterAdapter } from '../adapters/encrypter';
 import { User } from '../entities/user';
 import { IFindUserByEmailRepository } from '../repositories/find-by-email';
 import { IFindUserByGitHubRepository } from '../repositories/find-by-github';
-import { CreateUserDTO, ICreateUserUseCase } from './interfaces/icreate';
+import { CreateUserDTO, ICreateUserUseCase } from './interfaces/create';
 
 export class CreateUserUseCase implements ICreateUserUseCase {
   constructor(
