@@ -1,5 +1,6 @@
 import { AlreadyExistsError } from '@shared/errors/already-exists';
 
+import { IEncrypterAdapter } from '../adapters/encrypter';
 import { User } from '../entities/user';
 import { IFindUserByEmailRepository } from '../repositories/find-by-email';
 import { IFindUserByGitHubRepository } from '../repositories/find-by-github';
@@ -8,7 +9,8 @@ import { CreateUserDTO, ICreateUserUseCase } from './interfaces/icreate';
 export class CreateUserUseCase implements ICreateUserUseCase {
   constructor(
     private readonly findUserByEmailRepository: IFindUserByEmailRepository,
-    private readonly findUserByGitHubRepository: IFindUserByGitHubRepository
+    private readonly findUserByGitHubRepository: IFindUserByGitHubRepository,
+    private readonly encrypterAdapter: IEncrypterAdapter
   ) {}
 
   async execute({
@@ -33,6 +35,8 @@ export class CreateUserUseCase implements ICreateUserUseCase {
     if (githubAccountAlreadyExists) {
       throw new AlreadyExistsError(`GitHub account "${githubAccount}" already exists`);
     }
+
+    const encryptedPassword = this.encrypterAdapter.encrypt(password);
 
     return null as unknown as User;
   }
