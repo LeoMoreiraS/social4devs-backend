@@ -53,7 +53,7 @@ export class UserRepository implements IUserRepository {
     return findUser;
   }
 
-  findByGitHub({ githubAccount }: FindUserByGithubDTO.Params): Promise<FindUserByGithubDTO.Result> {
+  findByGithub({ githubAccount }: FindUserByGithubDTO.Params): Promise<FindUserByGithubDTO.Result> {
     throw new Error('Method not implemented.');
   }
 }

@@ -5,5 +5,5 @@ import { FindUserByGithubDTO } from './dtos/find-user-by-github-dto';
 export interface IUserRepository {
   create(params: CreateUserDTO.Params): Promise<CreateUserDTO.Result>;
   findByEmail({ email }: FindUserByEmailDTO.Params): Promise<FindUserByEmailDTO.Result>;
-  findByGitHub({ githubAccount }: FindUserByGithubDTO.Params): Promise<FindUserByGithubDTO.Result>;
+  findByGithub({ githubAccount }: FindUserByGithubDTO.Params): Promise<FindUserByGithubDTO.Result>;
 }
