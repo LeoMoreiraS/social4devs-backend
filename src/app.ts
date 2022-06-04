@@ -1,7 +1,10 @@
 import express, { NextFunction, Response, Request } from 'express';
 import 'express-async-errors';
+import dotenv from 'dotenv';
 
 import { router } from '@shared/infra/http/routes';
+
+dotenv.config();
 
 const app = express();
 
