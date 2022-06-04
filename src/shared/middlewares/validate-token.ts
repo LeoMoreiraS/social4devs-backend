@@ -9,7 +9,9 @@ export function verifyToken(request: Request, response: Response, next: NextFunc
   if (!token) {
     throw new AppError('Token is required');
   }
+
   const secret = process.env.JWT_SECRET ?? 'secret';
-  verify(token.toString(), secret);
+  const decodedToken = verify(token.toString(), secret);
+  response.locals.decodedToken = decodedToken;
   next();
 }
