@@ -1,6 +1,5 @@
-import { createDatabaseTables } from 'sql/create-database-tables';
-
 import { query } from '@shared/infra/database/connection';
+import { createDatabaseTables } from '@shared/infra/database/create-database-tables';
 
 import { app } from './app';
 
