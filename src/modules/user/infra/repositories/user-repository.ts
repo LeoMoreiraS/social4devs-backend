@@ -7,7 +7,7 @@ import { FindUserByGithubDTO } from '@user/domain/repositories/dtos/find-user-by
 import { IUserRepository } from '@user/domain/repositories/user-repository';
 
 export class UserRepository implements IUserRepository {
-  create({
+  async create({
     email,
     name,
     bio,
@@ -16,10 +16,16 @@ export class UserRepository implements IUserRepository {
     githubAccount,
     specialties,
   }: CreateUserDTO.Params): Promise<User> {
-    pgQuery.query(`
+    const response = await pgQuery.query(`
       INSERT INTO users (email, name, bio, nickname, password, githubAccount) 
       VALUES('${email}', '${name}', '${bio}', '${nickname}', '${password}', '${githubAccount}')
+      RETURNING email, name, bio, nickname, githubAccount;
     `);
+
+    // TODO adicionar specialties
+    const createdUser: User = response.rows[0];
+
+    return createdUser;
   }
 
   findByEmail({ email }: FindUserByEmailDTO.Params): Promise<FindUserByEmailDTO.Result> {
