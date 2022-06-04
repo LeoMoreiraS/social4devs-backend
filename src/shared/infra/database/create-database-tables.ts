@@ -2,7 +2,7 @@ export const createDatabaseTables = `
   CREATE TABLE IF NOT EXISTS USERS (
     email VARCHAR(255) NOT NULL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    bio VARCHAR(255) NOT NULL,
+    bio VARCHAR(255),
     nickname VARCHAR(255) NOT NULL,
     password VARCHAR(255) NOT NULL,
     github_account VARCHAR(255) NOT NULL
