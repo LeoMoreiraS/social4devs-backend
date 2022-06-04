@@ -19,14 +19,14 @@ export class UserRepository implements IUserRepository {
     const userResponse = await query(`
       INSERT INTO users (email, name, bio, nickname, password, github_account) 
       VALUES('${email}', '${name}', '${bio}', '${nickname}', '${password}', '${githubAccount}')
-      RETURNING *;
+      RETURNING email, name, bio, nickname, github_account;
     `);
 
     const createSpecialtiesPromises = specialties.map(async (specialty) => {
       const specialtyResponse = await query(`
         INSERT INTO specialties (user_email, name) 
         VALUES('${email}', '${specialty}')
-        RETURNING *;
+        RETURNING name;
       `);
 
       const createdSpecialty = specialtyResponse.rows[0];
