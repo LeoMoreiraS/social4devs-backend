@@ -6,7 +6,8 @@ import { CreateUserDTO } from './dtos/create-user-dto';
 
 export class CreateUserUseCase {
   constructor(
-    private readonly userRepository: IUserRepository // private readonly encrypterAdapter: IEncrypterAdapter
+    private readonly userRepository: IUserRepository,
+    private readonly encrypterAdapter: IEncrypterAdapter
   ) {}
 
   async execute({
@@ -30,15 +31,14 @@ export class CreateUserUseCase {
       throw new AppError(`GitHub account "${githubAccount}" already exists`);
     }
 
-    // const encryptedPassword = await this.encrypterAdapter.encrypt(password);
+    const encryptedPassword = await this.encrypterAdapter.encrypt(password);
 
     const user = await this.userRepository.create({
       email,
       name,
       bio,
       nickname,
-      // password: encryptedPassword,
-      password,
+      password: encryptedPassword,
       githubAccount,
       specialties,
     });
