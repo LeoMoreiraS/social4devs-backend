@@ -16,14 +16,30 @@ export class UserRepository implements IUserRepository {
     githubAccount,
     specialties,
   }: CreateUserDTO.Params): Promise<User> {
-    const response = await pgQuery.query(`
+    const userResponse = await pgQuery.query(`
       INSERT INTO users (email, name, bio, nickname, password, githubAccount) 
       VALUES('${email}', '${name}', '${bio}', '${nickname}', '${password}', '${githubAccount}')
-      RETURNING email, name, bio, nickname, githubAccount;
+      RETURNING *;
     `);
 
-    // TODO adicionar specialties
-    const createdUser: User = response.rows[0];
+    const createSpecialtiesPromises = specialties.map(async (specialty) => {
+      const specialtyResponse = await pgQuery.query(`
+        INSERT INTO specialties (user_email, name) 
+        VALUES('${email}', '${specialty}')
+        RETURNING *;
+      `);
+
+      const createdSpecialty = specialtyResponse.rows[0];
+
+      return createdSpecialty.name;
+    });
+
+    const createdSpecialties = await Promise.all(createSpecialtiesPromises);
+
+    const createdUser: User = {
+      ...userResponse.rows[0],
+      specialties: createdSpecialties,
+    };
 
     return createdUser;
   }
