@@ -1,10 +1,10 @@
 import { createDatabaseTables } from 'sql/create-database-tables';
 
-import { pgQuery } from '@shared/infra/database/connection';
+import { pg } from '@shared/infra/database/connection';
 
 import { app } from './app';
 
 app.listen(3333, () => {
-  pgQuery.query(createDatabaseTables);
+  pg.query(createDatabaseTables);
   console.log('Server is running');
 });

@@ -1,4 +1,4 @@
-import { pgQuery } from '@shared/infra/database/connection';
+import { pg } from '@shared/infra/database/connection';
 
 import { User } from '@user/domain/entities/user';
 import { CreateUserDTO } from '@user/domain/repositories/dtos/create-user-dto';
@@ -16,14 +16,14 @@ export class UserRepository implements IUserRepository {
     githubAccount,
     specialties,
   }: CreateUserDTO.Params): Promise<User> {
-    const userResponse = await pgQuery.query(`
+    const userResponse = await pg.query(`
       INSERT INTO users (email, name, bio, nickname, password, githubAccount) 
       VALUES('${email}', '${name}', '${bio}', '${nickname}', '${password}', '${githubAccount}')
       RETURNING *;
     `);
 
     const createSpecialtiesPromises = specialties.map(async (specialty) => {
-      const specialtyResponse = await pgQuery.query(`
+      const specialtyResponse = await pg.query(`
         INSERT INTO specialties (user_email, name) 
         VALUES('${email}', '${specialty}')
         RETURNING *;

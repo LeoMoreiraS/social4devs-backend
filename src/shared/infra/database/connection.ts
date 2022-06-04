@@ -1,6 +1,6 @@
 import { Pool } from 'pg';
 
-export const pgQuery = new Pool({
+export const pg = new Pool({
   user: 'postgres',
   host: 'localhost',
   database: 'postgres',
