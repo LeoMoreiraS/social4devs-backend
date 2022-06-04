@@ -6,7 +6,9 @@
     },
     "extends": [
         "airbnb-base",
-        "plugin:@typescript-eslint/recommended"
+        "plugin:@typescript-eslint/recommended",
+        "prettier",
+        "plugin:prettier/recommended"
     ],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
@@ -15,23 +17,19 @@
     },
     "plugins": [
         "@typescript-eslint",
-        "eslint-plugin-import-helpers"
+        "eslint-plugin-import-helpers",
+        "prettier"
     ],
     "rules": {
-        "quotes": ["error", "double"],
+        "max-classes-per-file": "off",
+        "quotes": ["error", "single"],
+        "prettier/prettier": [
+            "error", 
+            { "singleQuote": true, "printWidth": 100 }
+        ],
+        "@typescript-eslint/no-namespace": "off",
         "camelcase": "off",
         "import/no-unresolved": "error",
-        "@typescript-eslint/naming-convention": [
-            "error",
-            {
-            "selector": "interface",
-            "format": ["PascalCase"],
-            "custom": {
-                "regex": "^I[A-Z]",
-                "match": true
-            }
-            }
-        ],
         "class-methods-use-this": "off",
         "import/prefer-default-export": "off",
         "no-shadow": "off",
@@ -50,13 +48,14 @@
             "warn",
             {
             "newlinesBetween": "always",
-            "groups": ["module", "/^@shared/", ["parent", "sibling", "index"]],
+            "groups": [
+                "module", 
+                "/^@shared/", 
+                "/^@user/", 
+                ["parent", "sibling", "index"]
+            ],
             "alphabetize": { "order": "asc", "ignoreCase": true }
             }
-        ],
-        "import/no-extraneous-dependencies": [
-            "error",
-            { "devDependencies": ["**/*.spec.js"] }
         ]
     },
     "settings": {
