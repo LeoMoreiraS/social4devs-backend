@@ -22,13 +22,13 @@ export class CreateUserUseCase {
     const emailAlreadyExists = await this.userRepository.findByEmail({ email });
 
     if (emailAlreadyExists) {
-      throw new AppError(`Email "${email}" already exists`);
+      throw new AppError(`Email '${email}' already exists`);
     }
 
     const githubAccountAlreadyExists = await this.userRepository.findByGithub({ githubAccount });
 
     if (githubAccountAlreadyExists) {
-      throw new AppError(`GitHub account "${githubAccount}" already exists`);
+      throw new AppError(`GitHub account '${githubAccount}' already exists`);
     }
 
     const encryptedPassword = await this.encrypterAdapter.encrypt(password);
