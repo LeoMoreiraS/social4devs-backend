@@ -5,7 +5,7 @@ export const createDatabaseTables = `
     bio VARCHAR(255) NOT NULL,
     nickname VARCHAR(255) NOT NULL,
     password VARCHAR(255) NOT NULL,
-    githubAccount VARCHAR(255) NOT NULL
+    github_account VARCHAR(255) NOT NULL
   );
 
   CREATE TABLE IF NOT EXISTS SPECIALTIES (
