@@ -1,8 +1,22 @@
 import { AppError } from '@shared/errors/app-error';
 
 import { IEncrypterAdapter } from '../adapters/encrypter';
+import { User } from '../entities/user';
 import { IUserRepository } from '../repositories/user-repository';
-import { CreateUserDTO } from './dtos/create-user-dto';
+
+export namespace CreateUserUseCaseDTO {
+  export type Params = {
+    email: string;
+    name: string;
+    bio: string;
+    nickname: string;
+    password: string;
+    githubAccount: string;
+    specialties: string[];
+  };
+
+  export type Result = User;
+}
 
 export class CreateUserUseCase {
   constructor(
@@ -18,7 +32,7 @@ export class CreateUserUseCase {
     password,
     githubAccount,
     specialties,
-  }: CreateUserDTO.Params): Promise<CreateUserDTO.Result> {
+  }: CreateUserUseCaseDTO.Params): Promise<CreateUserUseCaseDTO.Result> {
     if (!email || !name || !nickname || !password || !githubAccount) {
       throw new AppError('Missing params');
     }

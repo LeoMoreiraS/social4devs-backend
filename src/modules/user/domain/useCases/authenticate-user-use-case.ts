@@ -4,7 +4,17 @@ import { AppError } from '@shared/errors/app-error';
 
 import { IEncrypterAdapter } from '../adapters/encrypter';
 import { IUserRepository } from '../repositories/user-repository';
-import { AuthenticateUserDTO } from './dtos/authenticate-user-dto';
+
+export namespace AuthenticateUserUseCaseDTO {
+  export type Params = {
+    email: string;
+    password: string;
+  };
+
+  export type Result = {
+    token: string;
+  };
+}
 
 export class AuthenticateUserUseCase {
   constructor(
@@ -15,7 +25,7 @@ export class AuthenticateUserUseCase {
   async execute({
     email,
     password,
-  }: AuthenticateUserDTO.Params): Promise<AuthenticateUserDTO.Result> {
+  }: AuthenticateUserUseCaseDTO.Params): Promise<AuthenticateUserUseCaseDTO.Result> {
     if (!email || !password) {
       throw new AppError('Missing params');
     }
