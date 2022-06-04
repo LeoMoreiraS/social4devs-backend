@@ -53,7 +53,16 @@ export class UserRepository implements IUserRepository {
     return findUser;
   }
 
-  findByGithub({ githubAccount }: FindUserByGithubDTO.Params): Promise<FindUserByGithubDTO.Result> {
-    throw new Error('Method not implemented.');
+  async findByGithub({
+    githubAccount,
+  }: FindUserByGithubDTO.Params): Promise<FindUserByGithubDTO.Result> {
+    const queryResponse = await query(
+      `SELECT * FROM users WHERE github_account = '${githubAccount}' LIMIT 1;`
+    );
+
+    const queryRows = queryResponse?.rows;
+
+    const findUser = queryRows.length > 0 ? queryRows[0] : null;
+    return findUser;
   }
 }

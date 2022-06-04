@@ -1,4 +1,4 @@
-import { AlreadyExistsError } from '@shared/errors/already-exists';
+import { AppError } from '@shared/errors/app-error';
 
 import { IEncrypterAdapter } from '../adapters/encrypter';
 import { IUserRepository } from '../repositories/user-repository';
@@ -20,17 +20,15 @@ export class CreateUserUseCase {
   }: CreateUserDTO.Params): Promise<CreateUserDTO.Result> {
     const emailAlreadyExists = await this.userRepository.findByEmail({ email });
 
-    console.log(emailAlreadyExists);
-
     if (emailAlreadyExists) {
-      throw new AlreadyExistsError(`Email "${email}" already exists`);
+      throw new AppError(`Email "${email}" already exists`);
     }
 
-    // const githubAccountAlreadyExists = await this.userRepository.findByGitHub({ githubAccount });
+    const githubAccountAlreadyExists = await this.userRepository.findByGithub({ githubAccount });
 
-    // if (githubAccountAlreadyExists) {
-    //   throw new AlreadyExistsError(`GitHub account "${githubAccount}" already exists`);
-    // }
+    if (githubAccountAlreadyExists) {
+      throw new AppError(`GitHub account "${githubAccount}" already exists`);
+    }
 
     // const encryptedPassword = await this.encrypterAdapter.encrypt(password);
 
