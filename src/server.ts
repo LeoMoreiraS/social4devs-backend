@@ -1,13 +1,10 @@
 import { createDatabaseTables } from 'sql/create-database-tables';
 
-import { pg } from '@shared/infra/database/connection';
+import { query } from '@shared/infra/database/connection';
 
 import { app } from './app';
 
 app.listen(3333, async () => {
-  console.log(process.env.DB_PASSWORD);
-  await pg.connect();
-  await pg.query(createDatabaseTables);
-  pg.end();
+  await query(createDatabaseTables);
   console.log('Server is running');
 });
