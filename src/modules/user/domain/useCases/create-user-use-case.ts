@@ -19,6 +19,10 @@ export class CreateUserUseCase {
     githubAccount,
     specialties,
   }: CreateUserDTO.Params): Promise<CreateUserDTO.Result> {
+    if (!email || !name || !nickname || !password || !githubAccount) {
+      throw new AppError('Missing params');
+    }
+
     const emailAlreadyExists = await this.userRepository.findByEmail({ email });
 
     if (emailAlreadyExists) {
