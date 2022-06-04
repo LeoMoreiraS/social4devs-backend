@@ -1,4 +1,4 @@
-export class User {
+export interface User {
   email: string;
   name: string;
   bio: string;
@@ -7,10 +7,4 @@ export class User {
   // avatar
   githubAccount: string;
   specialties: string[];
-  createdAt: Date;
-  updatedAt: Date;
-
-  constructor(data: Partial<User>) {
-    if (data) Object.assign(this, data);
-  }
 }
