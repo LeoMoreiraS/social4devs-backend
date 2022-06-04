@@ -14,7 +14,6 @@ export class UserRepository implements IUserRepository {
     nickname,
     password,
     githubAccount,
-    specialties,
   }: CreateUserDTO.Params): Promise<User> {
     const userResponse = await query(`
       INSERT INTO users (email, name, bio, nickname, password, github_account) 
@@ -22,24 +21,7 @@ export class UserRepository implements IUserRepository {
       RETURNING email, name, bio, nickname, github_account;
     `);
 
-    const createSpecialtiesPromises = specialties.map(async (specialty) => {
-      const specialtyResponse = await query(`
-        INSERT INTO specialties (user_email, name) 
-        VALUES('${email}', '${specialty}')
-        RETURNING name;
-      `);
-
-      const createdSpecialty = specialtyResponse.rows[0];
-
-      return createdSpecialty.name;
-    });
-
-    const createdSpecialties = await Promise.all(createSpecialtiesPromises);
-
-    const createdUser: User = {
-      ...userResponse.rows[0],
-      specialties: createdSpecialties,
-    };
+    const createdUser: User = userResponse.rows[0];
 
     return createdUser;
   }

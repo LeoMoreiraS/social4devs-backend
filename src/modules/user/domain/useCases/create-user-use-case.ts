@@ -2,6 +2,7 @@ import { AppError } from '@shared/errors/app-error';
 
 import { IEncrypterAdapter } from '../adapters/encrypter';
 import { User } from '../entities/user';
+import { ISpecialtyRepository } from '../repositories/specialty-repository';
 import { IUserRepository } from '../repositories/user-repository';
 
 export namespace CreateUserUseCaseDTO {
@@ -21,6 +22,7 @@ export namespace CreateUserUseCaseDTO {
 export class CreateUserUseCase {
   constructor(
     private readonly userRepository: IUserRepository,
+    private readonly specialtyRepository: ISpecialtyRepository,
     private readonly encrypterAdapter: IEncrypterAdapter
   ) {}
 
@@ -58,9 +60,24 @@ export class CreateUserUseCase {
       nickname,
       password: encryptedPassword,
       githubAccount,
-      specialties,
     });
 
-    return user;
+    const createSpecialtiesPromises = specialties.map(async (specialty) => {
+      const createdSpecialty = await this.specialtyRepository.create({
+        userEmail: email,
+        name: specialty,
+      });
+
+      return createdSpecialty;
+    });
+
+    const createdSpecialties = await Promise.all(createSpecialtiesPromises);
+
+    const createdUser = {
+      ...user,
+      specialties: createdSpecialties,
+    };
+
+    return createdUser;
   }
 }
