@@ -44,8 +44,13 @@ export class UserRepository implements IUserRepository {
     return createdUser;
   }
 
-  findByEmail({ email }: FindUserByEmailDTO.Params): Promise<FindUserByEmailDTO.Result> {
-    throw new Error('Method not implemented.');
+  async findByEmail({ email }: FindUserByEmailDTO.Params): Promise<FindUserByEmailDTO.Result> {
+    const { rows: queryResponse } = await pg.query(
+      `SELECT * FROM users WHERE email = '${email}' LIMIT 1;`
+    );
+
+    const findUser = queryResponse.length > 0 ? queryResponse[0] : null;
+    return findUser;
   }
 
   findByGitHub({ githubAccount }: FindUserByGithubDTO.Params): Promise<FindUserByGithubDTO.Result> {

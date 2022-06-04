@@ -18,11 +18,13 @@ export class CreateUserUseCase {
     githubAccount,
     specialties,
   }: CreateUserDTO.Params): Promise<CreateUserDTO.Result> {
-    // const emailAlreadyExists = await this.userRepository.findByEmail({ email });
+    const emailAlreadyExists = await this.userRepository.findByEmail({ email });
 
-    // if (emailAlreadyExists) {
-    //   throw new AlreadyExistsError(`Email "${email}" already exists`);
-    // }
+    console.log(emailAlreadyExists);
+
+    if (emailAlreadyExists) {
+      throw new AlreadyExistsError(`Email "${email}" already exists`);
+    }
 
     // const githubAccountAlreadyExists = await this.userRepository.findByGitHub({ githubAccount });
 
