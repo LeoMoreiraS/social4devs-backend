@@ -4,6 +4,7 @@ import { Specialty } from '@specialty/domain/entities/specialty';
 import { CreateSpecialtyDTO } from '@specialty/domain/repositories/dtos/create-specialty-dto';
 import { DeleteSpecialtyDTO } from '@specialty/domain/repositories/dtos/delete-specialty-dto';
 import { FindOneSpecialtyDTO } from '@specialty/domain/repositories/dtos/find-specialty-dto';
+import { FindUserSpecialtiesDTO } from '@specialty/domain/repositories/dtos/find-user-specialties-dto';
 import { ISpecialtyRepository } from '@specialty/domain/repositories/specialty-repository';
 
 export class SpecialtyRepository implements ISpecialtyRepository {
@@ -29,6 +30,17 @@ export class SpecialtyRepository implements ISpecialtyRepository {
 
     const findSpecialty = queryResponse.length > 0 ? queryResponse[0] : null;
     return findSpecialty;
+  }
+
+  async findUserSpecialties({
+    email,
+  }: FindUserSpecialtiesDTO.Params): Promise<FindUserSpecialtiesDTO.Result> {
+    const { rows: queryResponse } = await query(
+      `SELECT * FROM specialties WHERE user_email = '${email}';`
+    );
+
+    const findSpecialties = queryResponse.length > 0 ? queryResponse : null;
+    return findSpecialties;
   }
 
   async delete({ userEmail, name }: DeleteSpecialtyDTO.Params): Promise<DeleteSpecialtyDTO.Result> {
