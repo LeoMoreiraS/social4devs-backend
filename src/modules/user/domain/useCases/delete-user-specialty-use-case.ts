@@ -23,6 +23,12 @@ export class DeleteSpecialtyUseCase {
       throw new AppError('Missing params');
     }
 
+    const userHasSpecialty = await this.specialtyRepository.findOne({ userEmail, name });
+
+    if (!userHasSpecialty) {
+      throw new AppError('Specialty not found');
+    }
+
     const deletedSpecialty = await this.specialtyRepository.delete({ userEmail, name });
 
     return deletedSpecialty;
