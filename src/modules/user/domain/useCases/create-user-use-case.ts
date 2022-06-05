@@ -1,12 +1,28 @@
 import { AppError } from '@shared/errors/app-error';
 
 import { IEncrypterAdapter } from '../adapters/encrypter';
+import { User } from '../entities/user';
+import { ISpecialtyRepository } from '../repositories/specialty-repository';
 import { IUserRepository } from '../repositories/user-repository';
-import { CreateUserDTO } from './dtos/create-user-dto';
+
+export namespace CreateUserUseCaseDTO {
+  export type Params = {
+    email: string;
+    name: string;
+    bio: string;
+    nickname: string;
+    password: string;
+    githubAccount: string;
+    specialties: string[];
+  };
+
+  export type Result = User;
+}
 
 export class CreateUserUseCase {
   constructor(
     private readonly userRepository: IUserRepository,
+    private readonly specialtyRepository: ISpecialtyRepository,
     private readonly encrypterAdapter: IEncrypterAdapter
   ) {}
 
@@ -18,7 +34,11 @@ export class CreateUserUseCase {
     password,
     githubAccount,
     specialties,
-  }: CreateUserDTO.Params): Promise<CreateUserDTO.Result> {
+  }: CreateUserUseCaseDTO.Params): Promise<CreateUserUseCaseDTO.Result> {
+    if (!email || !name || !nickname || !password || !githubAccount) {
+      throw new AppError('Missing params');
+    }
+
     const emailAlreadyExists = await this.userRepository.findByEmail({ email });
 
     if (emailAlreadyExists) {
@@ -40,9 +60,24 @@ export class CreateUserUseCase {
       nickname,
       password: encryptedPassword,
       githubAccount,
-      specialties,
     });
 
-    return user;
+    const createSpecialtiesPromises = specialties.map(async (specialty) => {
+      const createdSpecialty = await this.specialtyRepository.create({
+        userEmail: email,
+        name: specialty,
+      });
+
+      return createdSpecialty;
+    });
+
+    const createdSpecialties = await Promise.all(createSpecialtiesPromises);
+
+    const createdUser = {
+      ...user,
+      specialties: createdSpecialties,
+    };
+
+    return createdUser;
   }
 }

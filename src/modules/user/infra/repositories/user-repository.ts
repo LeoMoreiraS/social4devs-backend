@@ -4,6 +4,7 @@ import { User } from '@user/domain/entities/user';
 import { CreateUserDTO } from '@user/domain/repositories/dtos/create-user-dto';
 import { FindUserByEmailDTO } from '@user/domain/repositories/dtos/find-user-by-email-dto';
 import { FindUserByGithubDTO } from '@user/domain/repositories/dtos/find-user-by-github-dto';
+import { UpdateUserDTO } from '@user/domain/repositories/dtos/update-user-dto';
 import { IUserRepository } from '@user/domain/repositories/user-repository';
 
 export class UserRepository implements IUserRepository {
@@ -14,7 +15,6 @@ export class UserRepository implements IUserRepository {
     nickname,
     password,
     githubAccount,
-    specialties,
   }: CreateUserDTO.Params): Promise<User> {
     const userResponse = await query(`
       INSERT INTO users (email, name, bio, nickname, password, github_account) 
@@ -22,24 +22,7 @@ export class UserRepository implements IUserRepository {
       RETURNING email, name, bio, nickname, github_account;
     `);
 
-    const createSpecialtiesPromises = specialties.map(async (specialty) => {
-      const specialtyResponse = await query(`
-        INSERT INTO specialties (user_email, name) 
-        VALUES('${email}', '${specialty}')
-        RETURNING name;
-      `);
-
-      const createdSpecialty = specialtyResponse.rows[0];
-
-      return createdSpecialty.name;
-    });
-
-    const createdSpecialties = await Promise.all(createSpecialtiesPromises);
-
-    const createdUser: User = {
-      ...userResponse.rows[0],
-      specialties: createdSpecialties,
-    };
+    const createdUser: User = userResponse.rows[0];
 
     return createdUser;
   }
@@ -64,5 +47,39 @@ export class UserRepository implements IUserRepository {
 
     const findUser = queryRows.length > 0 ? queryRows[0] : null;
     return findUser;
+  }
+
+  async update({
+    currentEmail,
+    email,
+    name,
+    bio,
+    nickname,
+    password,
+    githubAccount,
+  }: UpdateUserDTO.Params): Promise<User> {
+    const paramsToUpdateWithLastComma = `
+      ${email ? `email = '${email}',` : ''}
+      ${name ? `name = '${name}',` : ''}
+      ${bio ? `bio = '${bio}',` : ''}
+      ${nickname ? `nickname = '${nickname}',` : ''}
+      ${password ? `password = '${password}',` : ''}
+      ${githubAccount ? `github_account = '${githubAccount}',` : ''}
+    `;
+
+    // Todos os ternários acima possuem uma vírgula no final, o que causaria um erro na execução da query
+    // A função abaixo utiliza um regex para remover tudo após a última vírgula da string de parâmetros
+    const paramsToUpdateWithoutLastComma = paramsToUpdateWithLastComma.replace(/,([^,]*)$/, '');
+
+    const userResponse = await query(`
+      UPDATE users SET ${paramsToUpdateWithoutLastComma}
+      WHERE email = '${currentEmail}'
+      RETURNING email, name, bio, nickname, github_account;
+    `);
+
+    console.log(userResponse);
+    const updatedUser: User = userResponse.rows[0];
+
+    return updatedUser;
   }
 }
