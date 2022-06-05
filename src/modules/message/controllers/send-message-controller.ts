@@ -13,9 +13,9 @@ export class SendMessageController {
 
     const userRepository = new UserRepository();
     const messageRepository = new MessageRepository();
-    const followUserUseCase = new SendMessageUseCase(userRepository, messageRepository);
+    const sendMessageUseCase = new SendMessageUseCase(userRepository, messageRepository);
 
-    const result = await followUserUseCase.execute({
+    const result = await sendMessageUseCase.execute({
       emailUserSender: user.email,
       emailUserReceiver,
       text,
