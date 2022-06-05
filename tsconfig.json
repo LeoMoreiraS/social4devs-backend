@@ -8,6 +8,9 @@
     "paths": {
       "@user/*": ["modules/user/*"],
       "@post/*": ["modules/post/*"],
+      "@specialty/*": ["modules/specialty/*"],
+      "@follow/*": ["modules/follow/*"],
+      "@message/*": ["modules/message/*"],
       "@shared/*": ["shared/*"]
     },
     "esModuleInterop": true,

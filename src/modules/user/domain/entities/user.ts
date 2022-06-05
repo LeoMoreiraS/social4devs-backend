@@ -1,3 +1,5 @@
+import { Specialty } from '@specialty/domain/entities/specialty';
+
 export interface User {
   email: string;
   name: string;
@@ -6,5 +8,5 @@ export interface User {
   password: string;
   // avatar
   githubAccount: string;
-  specialties: string[];
+  specialties: Specialty[];
 }

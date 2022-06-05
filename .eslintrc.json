@@ -53,6 +53,9 @@
                 "/^@shared/", 
                 "/^@user/", 
                 "/^@post/", 
+                "/^@specialty/", 
+                "/^@follow/", 
+                "/^@message/", 
                 ["parent", "sibling", "index"]
             ],
             "alphabetize": { "order": "asc", "ignoreCase": true }
