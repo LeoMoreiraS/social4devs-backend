@@ -18,5 +18,13 @@ export const migrations = `
     PRIMARY KEY (user_email, name),
     FOREIGN KEY (user_email) REFERENCES USERS (email) ON DELETE CASCADE ON UPDATE CASCADE
   );
+
+  CREATE TABLE IF NOT EXISTS USER_FOLLOW (
+    email_follower VARCHAR(255) NOT NULL,
+    email_followed VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (email_follower, email_followed),
+    FOREIGN KEY (email_follower) REFERENCES USERS (email) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (email_followed) REFERENCES USERS (email) ON DELETE CASCADE ON UPDATE CASCADE
   );
 `;
