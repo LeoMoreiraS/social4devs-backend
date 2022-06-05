@@ -2,6 +2,8 @@ import { query } from '@shared/infra/database/connection';
 
 import { Specialty } from '@user/domain/entities/specialty';
 import { CreateSpecialtyDTO } from '@user/domain/repositories/dtos/create-specialty-dto';
+import { DeleteSpecialtyDTO } from '@user/domain/repositories/dtos/delete-specialty-dto';
+import { FindOneSpecialtyDTO } from '@user/domain/repositories/dtos/find-specialty-dto';
 import { ISpecialtyRepository } from '@user/domain/repositories/specialty-repository';
 
 export class SpecialtyRepository implements ISpecialtyRepository {
@@ -15,5 +17,28 @@ export class SpecialtyRepository implements ISpecialtyRepository {
     const createdSpecialty: Specialty = specialtyResponse.rows[0];
 
     return createdSpecialty;
+  }
+
+  async findOne({
+    userEmail,
+    name,
+  }: FindOneSpecialtyDTO.Params): Promise<FindOneSpecialtyDTO.Result> {
+    const { rows: queryResponse } = await query(
+      `SELECT * FROM specialties WHERE user_email = '${userEmail}' AND name = '${name}';`
+    );
+
+    const findSpecialty = queryResponse.length > 0 ? queryResponse[0] : null;
+    return findSpecialty;
+  }
+
+  async delete({ userEmail, name }: DeleteSpecialtyDTO.Params): Promise<DeleteSpecialtyDTO.Result> {
+    const { rows: queryResponse } = await query(`
+      DELETE FROM specialties 
+      WHERE user_email = '${userEmail}' AND name = '${name}'
+      RETURNING user_email, name;
+    `);
+
+    const deletedSpecialty = queryResponse.length > 0 ? queryResponse[0] : null;
+    return deletedSpecialty;
   }
 }
