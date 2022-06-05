@@ -12,6 +12,7 @@ export const migrations = `
     user_email VARCHAR(255) NOT NULL,
     name VARCHAR(255) NOT NULL,
     PRIMARY KEY (user_email, name),
-    FOREIGN KEY (user_email) REFERENCES USERS (email) ON DELETE SET NULL ON UPDATE CASCADE
+    FOREIGN KEY (user_email) REFERENCES USERS (email) ON DELETE CASCADE ON UPDATE CASCADE
+  );
   );
 `;
