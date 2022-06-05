@@ -4,6 +4,7 @@ import { CreateUserUseCase } from '@user/domain/useCases/create-user-use-case';
 import { BcryptEncrypterAdapter } from '@user/infra/adapters/bcrypt-encrypter-adapter';
 import { UserRepository } from '@user/infra/repositories/user-repository';
 
+import { CreateSpecialtyUseCase } from '@specialty/domain/useCases/create-user-specialty-use-case';
 import { SpecialtyRepository } from '@specialty/infra/repositories/specialty-repository';
 
 export class CreateUserController {
@@ -12,10 +13,11 @@ export class CreateUserController {
 
     const userRepository = new UserRepository();
     const specialtyRepository = new SpecialtyRepository();
+    const createSpecialtyUseCase = new CreateSpecialtyUseCase(specialtyRepository);
     const bcryptEncrypterAdapter = new BcryptEncrypterAdapter();
     const createUserUseCase = new CreateUserUseCase(
       userRepository,
-      specialtyRepository,
+      createSpecialtyUseCase,
       bcryptEncrypterAdapter
     );
 
