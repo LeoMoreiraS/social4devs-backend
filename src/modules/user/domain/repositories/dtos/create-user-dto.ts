@@ -8,7 +8,6 @@ export namespace CreateUserDTO {
     nickname: string;
     password: string;
     githubAccount: string;
-    specialties: string[];
   };
 
   export type Result = User;
