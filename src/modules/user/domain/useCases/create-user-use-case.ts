@@ -1,8 +1,9 @@
 import { AppError } from '@shared/errors/app-error';
 
+import { CreateSpecialtyUseCase } from '@specialty/domain/useCases/create-user-specialty-use-case';
+
 import { IEncrypterAdapter } from '../adapters/encrypter-adapter';
 import { User } from '../entities/user';
-import { ISpecialtyRepository } from '../repositories/specialty-repository';
 import { IUserRepository } from '../repositories/user-repository';
 
 export namespace CreateUserUseCaseDTO {
@@ -22,7 +23,7 @@ export namespace CreateUserUseCaseDTO {
 export class CreateUserUseCase {
   constructor(
     private readonly userRepository: IUserRepository,
-    private readonly specialtyRepository: ISpecialtyRepository,
+    private readonly createSpecialtyUseCase: CreateSpecialtyUseCase,
     private readonly encrypterAdapter: IEncrypterAdapter
   ) {}
 
@@ -63,7 +64,7 @@ export class CreateUserUseCase {
     });
 
     const createSpecialtiesPromises = specialties.map(async (specialty) => {
-      const createdSpecialty = await this.specialtyRepository.create({
+      const createdSpecialty = await this.createSpecialtyUseCase.execute({
         userEmail: email,
         name: specialty,
       });

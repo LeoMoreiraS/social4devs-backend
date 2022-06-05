@@ -9,6 +9,7 @@
       "@user/*": ["modules/user/*"],
       "@specialty/*": ["modules/specialty/*"],
       "@follow/*": ["modules/follow/*"],
+      "@message/*": ["modules/message/*"],
       "@shared/*": ["shared/*"]
     },
     "esModuleInterop": true,
