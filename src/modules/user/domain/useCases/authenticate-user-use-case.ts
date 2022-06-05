@@ -1,5 +1,4 @@
-import { sign } from 'jsonwebtoken';
-
+import { IAuthenticatorAdapter } from '@shared/adapters/authenticator-adapter';
 import { AppError } from '@shared/errors/app-error';
 
 import { IEncrypterAdapter } from '../adapters/encrypter-adapter';
@@ -19,7 +18,8 @@ export namespace AuthenticateUserUseCaseDTO {
 export class AuthenticateUserUseCase {
   constructor(
     private readonly userRepository: IUserRepository,
-    private readonly encrypterAdapter: IEncrypterAdapter
+    private readonly encrypterAdapter: IEncrypterAdapter,
+    private readonly authenticatorAdapter: IAuthenticatorAdapter
   ) {}
 
   async execute({
@@ -45,11 +45,8 @@ export class AuthenticateUserUseCase {
       throw new AppError('Wrong credentials');
     }
 
-    const secret = process.env.JWT_SECRET ?? 'secret';
-    const expiresIn = process.env.JWT_EXPIRES_IN ?? '1h';
-
-    const token = sign(user, secret, {
-      expiresIn,
+    const { token } = await this.authenticatorAdapter.createToken({
+      payload: user,
     });
 
     return {

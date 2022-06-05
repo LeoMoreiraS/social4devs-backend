@@ -1,6 +1,6 @@
 import { Router } from 'express';
 
-import { verifyToken } from '@shared/middlewares/validate-token';
+import { AuthorizationMiddleware } from '@shared/middlewares/authorization-middleware';
 
 import { AuthenticateUserController } from '@user/controllers/authenticate-user-controller';
 import { CreateUserController } from '@user/controllers/create-user-controller';
@@ -10,6 +10,8 @@ import { UpdateUserController } from '@user/controllers/update-user-controller';
 
 const userRoutes = Router();
 
+const authorizationMiddleware = new AuthorizationMiddleware();
+
 const createUserController = new CreateUserController();
 const authenticateUserController = new AuthenticateUserController();
 const updateUserController = new UpdateUserController();
@@ -17,10 +19,18 @@ const createSpecialtyController = new CreateSpecialtyController();
 const deleteSpecialtyController = new DeleteSpecialtyController();
 
 userRoutes.post('/', createUserController.handle);
-userRoutes.put('/', verifyToken, updateUserController.handle);
 userRoutes.post('/login', authenticateUserController.handle);
+userRoutes.put('/', authorizationMiddleware.verifyToken, updateUserController.handle);
 
-userRoutes.post('/specialty', verifyToken, createSpecialtyController.handle);
-userRoutes.delete('/specialty', verifyToken, deleteSpecialtyController.handle);
+userRoutes.post(
+  '/specialty',
+  authorizationMiddleware.verifyToken,
+  createSpecialtyController.handle
+);
+userRoutes.delete(
+  '/specialty',
+  authorizationMiddleware.verifyToken,
+  deleteSpecialtyController.handle
+);
 
 export { userRoutes };
