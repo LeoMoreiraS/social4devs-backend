@@ -1,4 +1,4 @@
-export const createDatabaseTables = `
+export const migrations = `
   CREATE TABLE IF NOT EXISTS USERS (
     email VARCHAR(255) NOT NULL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
