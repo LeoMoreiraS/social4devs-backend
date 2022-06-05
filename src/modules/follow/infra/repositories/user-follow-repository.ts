@@ -3,6 +3,8 @@ import { query } from '@shared/infra/database/connection';
 import { UserFollow } from '@follow/domain/entities/user-follow';
 import { CreateUserFollowDTO } from '@follow/domain/repositories/dtos/create-user-follow-dto';
 import { DeleteUserFollowDTO } from '@follow/domain/repositories/dtos/delete-user-follow-dto';
+import { FindFollowersDTO } from '@follow/domain/repositories/dtos/find-followers-dto';
+import { FindFollowsDTO } from '@follow/domain/repositories/dtos/find-follows-dto';
 import { FindUserFollowDTO } from '@follow/domain/repositories/dtos/find-user-follow-dto';
 import { IUserFollowRepository } from '@follow/domain/repositories/user-follow-repository';
 
@@ -49,5 +51,27 @@ export class UserFollowRepository implements IUserFollowRepository {
 
     const deletedUserFollow = queryResponse.length > 0 ? queryResponse[0] : null;
     return deletedUserFollow;
+  }
+
+  async findFollowers({ email }: FindFollowersDTO.Params): Promise<FindFollowersDTO.Result> {
+    const { rows: queryResponse } = await query(`
+      SELECT email, name, bio, nickname, github_account FROM users
+      JOIN users_follows ON users.email = users_follows.email_follower 
+      WHERE email_followed = '${email}' 
+    `);
+
+    const findUserFollowers = queryResponse.length > 0 ? queryResponse : null;
+    return findUserFollowers;
+  }
+
+  async findFollows({ email }: FindFollowsDTO.Params): Promise<FindFollowsDTO.Result> {
+    const { rows: queryResponse } = await query(`
+      SELECT email, name, bio, nickname, github_account FROM users
+      JOIN users_follows ON users.email = users_follows.email_followed 
+      WHERE email_follower = '${email}' 
+    `);
+
+    const findUserFollows = queryResponse.length > 0 ? queryResponse : null;
+    return findUserFollows;
   }
 }
