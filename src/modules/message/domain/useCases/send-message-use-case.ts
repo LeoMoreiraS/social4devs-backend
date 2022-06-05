@@ -26,6 +26,10 @@ export class SendMessageUseCase {
     emailUserReceiver,
     text,
   }: SendMessageUseCaseDTO.Params): Promise<SendMessageUseCaseDTO.Result> {
+    if (emailUserSender === emailUserReceiver) {
+      throw new AppError('User receiver is the same user sender');
+    }
+
     const userReceiver = await this.userRepository.findByEmail({ email: emailUserReceiver });
 
     if (!userReceiver) {
