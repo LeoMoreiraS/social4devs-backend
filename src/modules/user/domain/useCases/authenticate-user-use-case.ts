@@ -2,7 +2,7 @@ import { sign } from 'jsonwebtoken';
 
 import { AppError } from '@shared/errors/app-error';
 
-import { IEncrypterAdapter } from '../adapters/encrypter';
+import { IEncrypterAdapter } from '../adapters/encrypter-adapter';
 import { IUserRepository } from '../repositories/user-repository';
 
 export namespace AuthenticateUserUseCaseDTO {
