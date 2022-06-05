@@ -11,13 +11,13 @@ export class UserFollowRepository implements IUserFollowRepository {
     emailUserFollower,
     emailUserFollowed,
   }: CreateUserFollowDTO.Params): Promise<CreateUserFollowDTO.Result> {
-    const specialtyResponse = await query(`
+    const followResponse = await query(`
       INSERT INTO users_follows (email_follower, email_followed)
       VALUES('${emailUserFollower}', '${emailUserFollowed}')
       RETURNING *;
     `);
 
-    const createdUserFollow: UserFollow = specialtyResponse.rows[0];
+    const createdUserFollow: UserFollow = followResponse.rows[0];
 
     return createdUserFollow;
   }
