@@ -12,7 +12,7 @@ export class UserFollowRepository implements IUserFollowRepository {
     emailUserFollowed,
   }: CreateUserFollowDTO.Params): Promise<CreateUserFollowDTO.Result> {
     const specialtyResponse = await query(`
-      INSERT INTO user_follow (email_follower, email_followed)
+      INSERT INTO users_follows (email_follower, email_followed)
       VALUES('${emailUserFollower}', '${emailUserFollowed}')
       RETURNING *;
     `);
@@ -27,7 +27,7 @@ export class UserFollowRepository implements IUserFollowRepository {
     emailUserFollowed,
   }: FindUserFollowDTO.Params): Promise<FindUserFollowDTO.Result> {
     const { rows: queryResponse } = await query(`
-      SELECT * FROM user_follow 
+      SELECT * FROM users_follows 
       WHERE email_follower = '${emailUserFollower}' 
       AND email_followed = '${emailUserFollowed}';
     `);
@@ -41,7 +41,7 @@ export class UserFollowRepository implements IUserFollowRepository {
     emailUserUnfollowed,
   }: DeleteUserFollowDTO.Params): Promise<UserFollow> {
     const { rows: queryResponse } = await query(`
-      DELETE FROM user_follow 
+      DELETE FROM users_follows 
       WHERE email_follower = '${emailUserFollower}' 
       AND email_followed = '${emailUserUnfollowed}'
       RETURNING *;
