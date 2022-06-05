@@ -77,7 +77,6 @@ export class UserRepository implements IUserRepository {
       RETURNING email, name, bio, nickname, github_account;
     `);
 
-    console.log(userResponse);
     const updatedUser: User = userResponse.rows[0];
 
     return updatedUser;

@@ -1,6 +1,6 @@
 import { AppError } from '@shared/errors/app-error';
 
-import { IEncrypterAdapter } from '../adapters/encrypter';
+import { IEncrypterAdapter } from '../adapters/encrypter-adapter';
 import { User } from '../entities/user';
 import { ISpecialtyRepository } from '../repositories/specialty-repository';
 import { IUserRepository } from '../repositories/user-repository';

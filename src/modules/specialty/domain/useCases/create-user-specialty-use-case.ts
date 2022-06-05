@@ -1,6 +1,7 @@
 import { AppError } from '@shared/errors/app-error';
 
-import { Specialty } from '../entities/specialty';
+import { Specialty } from '@specialty/domain/entities/specialty';
+
 import { ISpecialtyRepository } from '../repositories/specialty-repository';
 
 export namespace CreateSpecialtyUseCaseDTO {

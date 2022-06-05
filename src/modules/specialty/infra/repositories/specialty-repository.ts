@@ -1,10 +1,10 @@
 import { query } from '@shared/infra/database/connection';
 
-import { Specialty } from '@user/domain/entities/specialty';
-import { CreateSpecialtyDTO } from '@user/domain/repositories/dtos/create-specialty-dto';
-import { DeleteSpecialtyDTO } from '@user/domain/repositories/dtos/delete-specialty-dto';
-import { FindOneSpecialtyDTO } from '@user/domain/repositories/dtos/find-specialty-dto';
-import { ISpecialtyRepository } from '@user/domain/repositories/specialty-repository';
+import { Specialty } from '@specialty/domain/entities/specialty';
+import { CreateSpecialtyDTO } from '@specialty/domain/repositories/dtos/create-specialty-dto';
+import { DeleteSpecialtyDTO } from '@specialty/domain/repositories/dtos/delete-specialty-dto';
+import { FindOneSpecialtyDTO } from '@specialty/domain/repositories/dtos/find-specialty-dto';
+import { ISpecialtyRepository } from '@specialty/domain/repositories/specialty-repository';
 
 export class SpecialtyRepository implements ISpecialtyRepository {
   async create({ userEmail, name }: CreateSpecialtyDTO.Params): Promise<CreateSpecialtyDTO.Result> {

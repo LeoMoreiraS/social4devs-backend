@@ -2,7 +2,7 @@ import { JwtPayload } from 'jsonwebtoken';
 
 import { AppError } from '@shared/errors/app-error';
 
-import { IEncrypterAdapter } from '../adapters/encrypter';
+import { IEncrypterAdapter } from '../adapters/encrypter-adapter';
 import { User } from '../entities/user';
 import { IUserRepository } from '../repositories/user-repository';
 
