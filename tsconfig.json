@@ -7,6 +7,7 @@
     "baseUrl": "./src",
     "paths": {
       "@user/*": ["modules/user/*"],
+      "@specialty/*": ["modules/specialty/*"],
       "@shared/*": ["shared/*"]
     },
     "esModuleInterop": true,
