@@ -1,4 +1,4 @@
-import { Specialty } from '@user/domain/entities/specialty';
+import { Specialty } from '@specialty/domain/entities/specialty';
 
 export namespace CreateSpecialtyDTO {
   export type Params = {

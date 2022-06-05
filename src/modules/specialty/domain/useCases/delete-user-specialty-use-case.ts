@@ -1,6 +1,7 @@
 import { AppError } from '@shared/errors/app-error';
 
-import { Specialty } from '../entities/specialty';
+import { Specialty } from '@specialty/domain/entities/specialty';
+
 import { ISpecialtyRepository } from '../repositories/specialty-repository';
 
 export namespace DeleteSpecialtyUseCaseDTO {
@@ -9,7 +10,7 @@ export namespace DeleteSpecialtyUseCaseDTO {
     name: string;
   };
 
-  export type Result = Specialty | null;
+  export type Result = Specialty;
 }
 
 export class DeleteSpecialtyUseCase {

@@ -2,8 +2,9 @@ import { Response, Request } from 'express';
 
 import { CreateUserUseCase } from '@user/domain/useCases/create-user-use-case';
 import { BcryptEncrypterAdapter } from '@user/infra/adapters/bcrypt-encrypter-adapter';
-import { SpecialtyRepository } from '@user/infra/repositories/specialty-repository';
 import { UserRepository } from '@user/infra/repositories/user-repository';
+
+import { SpecialtyRepository } from '@specialty/infra/repositories/specialty-repository';
 
 export class CreateUserController {
   async handle(request: Request, response: Response): Promise<Response> {

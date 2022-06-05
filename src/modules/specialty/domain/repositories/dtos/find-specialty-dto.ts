@@ -1,6 +1,6 @@
-import { Specialty } from '@user/domain/entities/specialty';
+import { Specialty } from '@specialty/domain/entities/specialty';
 
-export namespace DeleteSpecialtyDTO {
+export namespace FindOneSpecialtyDTO {
   export type Params = {
     userEmail: string;
     name: string;

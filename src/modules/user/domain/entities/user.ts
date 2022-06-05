@@ -1,4 +1,4 @@
-import { Specialty } from './specialty';
+import { Specialty } from '@specialty/domain/entities/specialty';
 
 export interface User {
   email: string;
