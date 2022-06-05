@@ -2,6 +2,7 @@ import { query } from '@shared/infra/database/connection';
 
 import { Message } from '@message/domain/entities/message';
 import { CreateMessageDTO } from '@message/domain/repositories/dtos/create-message-dto';
+import { GetUserChatDTO } from '@message/domain/repositories/dtos/get-user-chat-dto';
 import { IMessageRepository } from '@message/domain/repositories/message-repository';
 
 export class MessageRepository implements IMessageRepository {
@@ -21,32 +22,17 @@ export class MessageRepository implements IMessageRepository {
     return createdMessage;
   }
 
-  // async findOne({
-  //   emailUserFollower,
-  //   emailUserFollowed,
-  // }: FindUserFollowDTO.Params): Promise<FindUserFollowDTO.Result> {
-  //   const { rows: queryResponse } = await query(`
-  //     SELECT * FROM users_follows
-  //     WHERE email_follower = '${emailUserFollower}'
-  //     AND email_followed = '${emailUserFollowed}';
-  //   `);
+  async getUserChat({
+    emailUserSender,
+    emailUserReceiver,
+  }: GetUserChatDTO.Params): Promise<GetUserChatDTO.Result> {
+    const { rows: queryResponse } = await query(`
+      SELECT * FROM messages
+      WHERE (email_sender = '${emailUserSender}' OR email_sender = '${emailUserReceiver}')
+      AND (email_receiver = '${emailUserSender}' OR email_receiver = '${emailUserReceiver}')
+      ORDER BY created_at DESC;
+    `);
 
-  //   const findUserFollow = queryResponse.length > 0 ? queryResponse[0] : null;
-  //   return findUserFollow;
-  // }
-
-  // async delete({
-  //   emailUserFollower,
-  //   emailUserUnfollowed,
-  // }: DeleteUserFollowDTO.Params): Promise<UserFollow> {
-  //   const { rows: queryResponse } = await query(`
-  //     DELETE FROM users_follows
-  //     WHERE email_follower = '${emailUserFollower}'
-  //     AND email_followed = '${emailUserUnfollowed}'
-  //     RETURNING *;
-  //   `);
-
-  //   const deletedUserFollow = queryResponse.length > 0 ? queryResponse[0] : null;
-  //   return deletedUserFollow;
-  // }
+    return queryResponse;
+  }
 }
