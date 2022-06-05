@@ -31,19 +31,19 @@ export class FollowUserUseCase {
     }
 
     const userFollowExists = await this.userFollowRepository.findOne({
-      emailUserFollowed,
       emailUserFollower,
+      emailUserFollowed,
     });
 
     if (userFollowExists) {
       throw new AppError(`User ${emailUserFollower} already follows user ${emailUserFollowed}`);
     }
 
-    const userFollow = await this.userFollowRepository.create({
-      emailUserFollowed,
+    const createdUserFollow = await this.userFollowRepository.create({
       emailUserFollower,
+      emailUserFollowed,
     });
 
-    return userFollow;
+    return createdUserFollow;
   }
 }
