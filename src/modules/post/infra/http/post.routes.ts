@@ -7,12 +7,14 @@ import { CreateLikeController } from '@post/controllers/create-like-controller';
 import { CreatePostController } from '@post/controllers/create-post-controller';
 import { DeleteCommentaryController } from '@post/controllers/delete-commentary-controller';
 import { DeleteLikeController } from '@post/controllers/delete-like-controller';
+import { DeletePostController } from '@post/controllers/delete-post-controller';
 import { ListPostsByUserController } from '@post/controllers/list-posts-by-user-controller';
 import { ListPostsTimelineController } from '@post/controllers/list-posts-timeline-controller';
 
 const postRoutes = Router();
 
 const createPostController = new CreatePostController();
+const deletePostController = new DeletePostController();
 const createLikeController = new CreateLikeController();
 const deleteLikeController = new DeleteLikeController();
 const listPostsByUserController = new ListPostsByUserController();
@@ -23,6 +25,7 @@ const deleteCommentaryController = new DeleteCommentaryController();
 
 postRoutes.use(authorizationMiddleware.verifyToken);
 postRoutes.post('/', createPostController.handle);
+postRoutes.delete('/', deletePostController.handle);
 postRoutes.get('/user/:pageEmail', listPostsByUserController.handle);
 postRoutes.get('/', listPostsTimelineController.handle);
 postRoutes.post('/like', createLikeController.handle);

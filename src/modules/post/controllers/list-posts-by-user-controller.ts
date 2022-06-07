@@ -19,6 +19,6 @@ export class ListPostsByUserController {
       userEmail: email,
     });
 
-    return response.status(201).json(result);
+    return response.status(200).json(result);
   }
 }
