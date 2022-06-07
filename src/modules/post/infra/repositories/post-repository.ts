@@ -2,6 +2,7 @@ import { query } from '@shared/infra/database/connection';
 
 import { Post } from '@post/domain/entities/post';
 import { CreatePostDTO } from '@post/domain/repositories/dtos/create-post-dto';
+import { DeletePostDTO } from '@post/domain/repositories/dtos/delete-post-dto';
 import { FindPostDTO } from '@post/domain/repositories/dtos/find-post-dto';
 import { IPostRepository } from '@post/domain/repositories/post-repository';
 
@@ -92,5 +93,13 @@ export class PostRepository implements IPostRepository {
     const createdPost: Post = response.rows[0];
 
     return createdPost;
+  }
+
+  async delete({ email, body }: DeletePostDTO.Params): Promise<void> {
+    await query(`
+    DELETE FROM  posts WHERE
+       publisher_email = '${email}' AND body =  
+       '${body}';
+    `);
   }
 }

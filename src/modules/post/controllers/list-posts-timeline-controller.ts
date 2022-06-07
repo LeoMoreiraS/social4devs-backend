@@ -14,6 +14,6 @@ export class ListPostsTimelineController {
 
     const result = await listPostsTimelineUseCase.execute(email);
 
-    return response.status(201).json(result);
+    return response.status(200).json(result);
   }
 }

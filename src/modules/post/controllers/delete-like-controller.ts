@@ -18,6 +18,6 @@ export class DeleteLikeController {
 
     const result = await deleteLikeUseCase.execute({ postEmail, postBody, userEmail: email });
 
-    return response.status(201).json(result);
+    return response.status(200).json(result);
   }
 }
