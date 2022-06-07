@@ -55,7 +55,7 @@ export class UserRepository implements IUserRepository {
     nickname,
   }: FindAllUsersByNameOrNicknameDTO.Params): Promise<FindAllUsersByNameOrNicknameDTO.Result> {
     const queryResponse = await query(
-      `SELECT name, nickname FROM users WHERE name LIKE '%${name}%' OR nickname LIKE '%${nickname}%';`
+      `SELECT email, name, nickname FROM users WHERE name LIKE '%${name}%' OR nickname LIKE '%${nickname}%';`
     );
 
     const users = queryResponse?.rows;
