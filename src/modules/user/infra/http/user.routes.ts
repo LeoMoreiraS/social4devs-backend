@@ -23,5 +23,6 @@ userRoutes.post('/login', authenticateUserController.handle);
 userRoutes.put('/', authorizationMiddleware.verifyToken, updateUserController.handle);
 userRoutes.get('/', authorizationMiddleware.verifyToken, getUserInfoController.handle);
 userRoutes.get('/search', authorizationMiddleware.verifyToken, findUserController.handle);
+userRoutes.get('/profile', authorizationMiddleware.verifyToken, findUserController.handle);
 
 export { userRoutes };
