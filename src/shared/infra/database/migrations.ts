@@ -5,10 +5,10 @@ export const migrations = `
     bio VARCHAR(255),
     nickname VARCHAR(255) NOT NULL,
     password VARCHAR(255) NOT NULL,
-    github_account VARCHAR(255) NOT NULL
+    githubAccount VARCHAR(255) NOT NULL
   );
   
-  INSERT INTO users (email, name, bio, nickname, password, github_account) 
+  INSERT INTO users (email, name, bio, nickname, password, githubAccount) 
   SELECT 'admin', 'admin', 'system admin', 'admin', '$2a$12$okqCGvt1iglepFnMg/9zJud8itKI6PumqVmF2WpFmpxVP68gVXwr6', 'admin'
   WHERE NOT EXISTS (SELECT * FROM users WHERE email = 'admin');
 

@@ -18,9 +18,9 @@ export class UserRepository implements IUserRepository {
     githubAccount,
   }: CreateUserDTO.Params): Promise<User> {
     const userResponse = await query(`
-      INSERT INTO users (email, name, bio, nickname, password, github_account) 
+      INSERT INTO users (email, name, bio, nickname, password, githubAccount) 
       VALUES('${email}', '${name}', '${bio}', '${nickname}', '${password}', '${githubAccount}')
-      RETURNING email, name, bio, nickname, github_account;
+      RETURNING email, name, bio, nickname, githubAccount;
     `);
 
     const createdUser: User = userResponse.rows[0];
@@ -41,7 +41,7 @@ export class UserRepository implements IUserRepository {
     githubAccount,
   }: FindUserByGithubDTO.Params): Promise<FindUserByGithubDTO.Result> {
     const queryResponse = await query(
-      `SELECT * FROM users WHERE github_account = '${githubAccount}' LIMIT 1;`
+      `SELECT * FROM users WHERE githubAccount = '${githubAccount}' LIMIT 1;`
     );
 
     const queryRows = queryResponse?.rows;
@@ -78,7 +78,7 @@ export class UserRepository implements IUserRepository {
       ${bio ? `bio = '${bio}',` : ''}
       ${nickname ? `nickname = '${nickname}',` : ''}
       ${password ? `password = '${password}',` : ''}
-      ${githubAccount ? `github_account = '${githubAccount}',` : ''}
+      ${githubAccount ? `githubAccount = '${githubAccount}',` : ''}
     `;
 
     // Todos os ternários acima possuem uma vírgula no final, o que causaria um erro na execução da query
@@ -88,7 +88,7 @@ export class UserRepository implements IUserRepository {
     const userResponse = await query(`
       UPDATE users SET ${paramsToUpdateWithoutLastComma}
       WHERE email = '${currentEmail}'
-      RETURNING email, name, bio, nickname, github_account;
+      RETURNING email, name, bio, nickname, githubAccount;
     `);
 
     const updatedUser: User = userResponse.rows[0];

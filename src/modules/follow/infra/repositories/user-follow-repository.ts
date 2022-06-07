@@ -55,7 +55,7 @@ export class UserFollowRepository implements IUserFollowRepository {
 
   async findFollowers({ email }: FindFollowersDTO.Params): Promise<FindFollowersDTO.Result> {
     const { rows: queryResponse } = await query(`
-      SELECT email, name, bio, nickname, github_account FROM users
+      SELECT email, name, bio, nickname, githubAccount FROM users
       JOIN users_follows ON users.email = users_follows.email_follower 
       WHERE email_followed = '${email}' 
     `);
@@ -66,7 +66,7 @@ export class UserFollowRepository implements IUserFollowRepository {
 
   async findFollows({ email }: FindFollowsDTO.Params): Promise<FindFollowsDTO.Result> {
     const { rows: queryResponse } = await query(`
-      SELECT email, name, bio, nickname, github_account FROM users
+      SELECT email, name, bio, nickname, githubAccount FROM users
       JOIN users_follows ON users.email = users_follows.email_followed 
       WHERE email_follower = '${email}' 
     `);
