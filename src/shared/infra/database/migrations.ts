@@ -54,7 +54,7 @@ export const migrations = `
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (post_email, post_body, user_email),
     FOREIGN KEY (post_email, post_body) REFERENCES POSTS (publisher_email, body) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (user_email) REFERENCES users (email) ON DELETE SET NULL ON UPDATE CASCADE
+    FOREIGN KEY (user_email) REFERENCES users (email) ON DELETE CASCADE ON UPDATE CASCADE
   );
 
   CREATE TABLE IF NOT EXISTS COMMENTARIES (
@@ -65,6 +65,6 @@ export const migrations = `
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (post_email, post_body, user_email, commentary),
     FOREIGN KEY (post_email, post_body) REFERENCES POSTS (publisher_email, body) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (user_email) REFERENCES users (email) ON DELETE SET NULL ON UPDATE CASCADE
+    FOREIGN KEY (user_email) REFERENCES users (email) ON DELETE CASCADE ON UPDATE CASCADE
   );
 `;
