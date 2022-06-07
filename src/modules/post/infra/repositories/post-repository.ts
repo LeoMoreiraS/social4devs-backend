@@ -27,7 +27,7 @@ export class PostRepository implements IPostRepository {
       response?.rows.map<Promise<Post>>(async (row) => {
         const commentaries = await query(`SELECT C.*, U.nickname
       FROM COMMENTARIES  C JOIN USERS U ON C.user_email = U.email WHERE C.post_email = '${row.publisher_email}' AND C.post_body = '${row.body}'
-      ORDER BY C.created_at;
+      ORDER BY C.created_at DESC;
       `);
         const likes = await query(`SELECT L.*, U.nickname
       FROM LIKES L JOIN USERS U ON L.user_email = U.email WHERE L.post_email = '${row.publisher_email}' AND L.post_body = '${row.body}';
@@ -62,7 +62,7 @@ export class PostRepository implements IPostRepository {
       response?.rows.map<Promise<Post>>(async (row) => {
         const commentaries = await query(`SELECT C.*, U.nickname
       FROM COMMENTARIES C JOIN USERS U ON C.user_email = U.email WHERE C.post_email = '${row.publisher_email}' AND C.post_body = '${row.body}'
-      ORDER BY C.created_at;
+      ORDER BY C.created_at DESC;
       `);
         const likes = await query(`SELECT L.*, U.nickname
       FROM LIKES L JOIN USERS U ON L.user_email = U.email WHERE L.post_email = '${row.publisher_email}' AND L.post_body = '${row.body}';
