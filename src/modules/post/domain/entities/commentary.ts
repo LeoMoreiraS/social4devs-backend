@@ -1,11 +1,12 @@
-export class Like {
+export class Commentary {
   postEmail: string;
   postBody: string;
+  commentary: string;
   userEmail: string;
   createdAt: Date;
-  nickname: string;
+  nickename: string;
 
-  constructor(data: Partial<Like>) {
+  constructor(data: Partial<Commentary>) {
     if (data) Object.assign(this, data);
   }
 }

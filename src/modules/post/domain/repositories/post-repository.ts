@@ -4,6 +4,6 @@ import { FindPostDTO } from './dtos/find-post-dto';
 
 export interface IPostRepository {
   create(params: CreatePostDTO.Params): Promise<CreatePostDTO.Result>;
-  list(email: string): Promise<Post[]>;
+  listMainPage(userEmail: string): Promise<Post[]>;
   find(params: FindPostDTO.Params): Promise<FindPostDTO.Result>;
 }

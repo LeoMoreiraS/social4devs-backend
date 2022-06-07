@@ -37,4 +37,34 @@ export const migrations = `
     FOREIGN KEY (email_sender) REFERENCES USERS (email) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (email_receiver) REFERENCES USERS (email) ON DELETE CASCADE ON UPDATE CASCADE
   );
+
+  CREATE TABLE IF NOT EXISTS POSTS (
+    publisher_email VARCHAR(255) NOT NULL,
+    body VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (publisher_email, body),
+    FOREIGN KEY (publisher_email) REFERENCES USERS (email) ON DELETE CASCADE ON UPDATE CASCADE
+  );
+
+  CREATE TABLE IF NOT EXISTS LIKES (
+    post_email VARCHAR(255) NOT NULL,
+    post_body VARCHAR(255) NOT NULL,
+    user_email VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (post_email, post_body, user_email),
+    FOREIGN KEY (post_email, post_body) REFERENCES POSTS (publisher_email, body) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (user_email) REFERENCES users (email) ON DELETE SET NULL ON UPDATE CASCADE
+  );
+
+  CREATE TABLE IF NOT EXISTS COMMENTARIES (
+    post_email VARCHAR(255) NOT NULL,
+    commentary VARCHAR(255) NOT NULL,
+    post_body VARCHAR(255) NOT NULL,
+    user_email VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (post_email, post_body, user_email, commentary),
+    FOREIGN KEY (post_email, post_body) REFERENCES POSTS (publisher_email, body) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (user_email) REFERENCES users (email) ON DELETE SET NULL ON UPDATE CASCADE
+  );
 `;
