@@ -45,7 +45,7 @@ export class CommentaryRepository implements ICommentaryRepository {
   }: CreateCommentaryDTO.Params): Promise<Commentary> {
     const response = await query(` 
       SELECT * FROM
-      COMMENTARIES 
+      COMMENTARIES JOIN USERS
       WHERE post_email ='${postEmail}' AND
       post_body = '${postBody}' AND user_email = '${userEmail}' AND commentary ='${commentary}';
       
@@ -57,8 +57,8 @@ export class CommentaryRepository implements ICommentaryRepository {
     postBody,
   }: ListCommentaryDTO.Params): Promise<ListCommentaryDTO.Result> {
     const response = await query(` 
-      SELECT * FROM  
-      COMMENTARIES 
+      SELECT C.*, U.name, U.nickname FROM  
+      COMMENTARIES C JOIN USERS U ON U.email = C.user_email
       
        WHERE post_email ='${postEmail}' AND
        post_body = '${postBody}';
