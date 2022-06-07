@@ -11,7 +11,7 @@ export class CommentaryRepository implements ICommentaryRepository {
     commentary,
   }: CreateCommentaryDTO.Params): Promise<void> {
     await query(` 
-     DELETE FROM LIKES
+     DELETE FROM COMMENTARIES
      WHERE post_email = '${postEmail}' AND
      post_body = '${postBody}' AND
      user_email = '${userEmail}' AND 
