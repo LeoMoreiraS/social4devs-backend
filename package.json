@@ -10,7 +10,8 @@
     "node" : ">=16.0.0"
   },
   "scripts": {
-    "start": "ts-node-dev -r tsconfig-paths/register --inspect --transpile-only --ignore-watch node_modules --poll --respawn src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
     "dev": "ts-node-dev -r tsconfig-paths/register --inspect --transpile-only --ignore-watch node_modules --poll --respawn src/server.ts",
     "typeorm": "ts-node-dev -r tsconfig-paths/register ./node_modules/typeorm/cli",
     "test": "jest",

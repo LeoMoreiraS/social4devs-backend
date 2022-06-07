@@ -5,6 +5,7 @@
     "moduleResolution": "node",
     "rootDir": "./",
     "baseUrl": "./src",
+    "outDir": "./dist",
     "paths": {
       "@user/*": ["modules/user/*"],
       "@post/*": ["modules/post/*"],
