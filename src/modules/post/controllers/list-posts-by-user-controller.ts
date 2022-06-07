@@ -7,13 +7,17 @@ import { PostRepository } from '@post/infra/repositories/post-repository';
 
 export class ListPostsByUserController {
   async handle(request: Request, response: Response): Promise<Response> {
-    const { email } = request.params;
-
+    const { pageEmail } = request.params;
+    console.log(pageEmail);
+    const { email } = response.locals.decodedToken;
     const postRepository = new PostRepository();
     const userRepository = new UserRepository();
     const listPostsByUserUseCase = new ListPostsByUserUseCase(postRepository, userRepository);
 
-    const result = await listPostsByUserUseCase.execute(email);
+    const result = await listPostsByUserUseCase.execute({
+      publisherEmail: pageEmail,
+      userEmail: email,
+    });
 
     return response.status(201).json(result);
   }
