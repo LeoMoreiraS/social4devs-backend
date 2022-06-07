@@ -36,11 +36,15 @@ export class SpecialtyRepository implements ISpecialtyRepository {
     email,
   }: FindUserSpecialtiesDTO.Params): Promise<FindUserSpecialtiesDTO.Result> {
     const { rows: queryResponse } = await query(
-      `SELECT * FROM specialties WHERE user_email = '${email}';`
+      `SELECT name FROM specialties WHERE user_email = '${email}';`
     );
 
-    const findSpecialties = queryResponse.length > 0 ? queryResponse : null;
-    return findSpecialties;
+    if (queryResponse.length > 0) {
+      const findSpecialties = queryResponse.map((specialty) => specialty.name);
+      return findSpecialties;
+    }
+
+    return null;
   }
 
   async delete({ userEmail, name }: DeleteSpecialtyDTO.Params): Promise<DeleteSpecialtyDTO.Result> {
