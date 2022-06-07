@@ -5,6 +5,10 @@
   "repository": "git@github.com:LeoMoreiraS/social4devs-backend.git",
   "author": "ArthurEnrique15 <arthurenrique1512@gmail.com>",
   "license": "MIT",
+  "engines": {
+    "yarn" : ">=1.22.5",
+    "node" : ">=16.0.0"
+  },
   "scripts": {
     "dev": "ts-node-dev -r tsconfig-paths/register --inspect --transpile-only --ignore-watch node_modules --poll --respawn src/server.ts",
     "typeorm": "ts-node-dev -r tsconfig-paths/register ./node_modules/typeorm/cli",
