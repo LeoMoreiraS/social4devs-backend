@@ -9,7 +9,7 @@ import { UserFollowRepository } from '@follow/infra/repositories/user-follow-rep
 
 export class FindUserProfileController {
   async handle(request: Request, response: Response): Promise<Response> {
-    const email = request.headers;
+    const { email } = request.headers;
 
     const userRepository = new UserRepository();
     const specialtyRepository = new SpecialtyRepository();
@@ -21,7 +21,7 @@ export class FindUserProfileController {
     );
 
     const result = await getUserInfoUseCase.execute({
-      email: email?.toString(),
+      email: email?.toString() ?? '',
     });
 
     return response.status(200).json(result);
