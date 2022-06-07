@@ -3,7 +3,7 @@ import { CreateCommentaryDTO } from './dtos/create-comentary-dto';
 import { ListCommentaryDTO } from './dtos/list-comentaries-dto';
 
 export interface ICommentaryRepository {
-  create(params: CreateCommentaryDTO.Params): Promise<void>;
+  create(params: CreateCommentaryDTO.Params): Promise<Commentary>;
   delete(params: CreateCommentaryDTO.Params): Promise<void>;
   find({
     postEmail,
