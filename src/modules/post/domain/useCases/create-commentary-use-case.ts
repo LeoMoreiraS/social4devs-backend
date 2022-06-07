@@ -2,6 +2,7 @@ import { AppError } from '@shared/errors/app-error';
 
 import { IUserRepository } from '@user/domain/repositories/user-repository';
 
+import { Commentary } from '../entities/commentary';
 import { ICommentaryRepository } from '../repositories/comentary-repository';
 import { IPostRepository } from '../repositories/post-repository';
 
@@ -26,7 +27,7 @@ export class CreateCommentaryUseCase {
     userEmail,
     postBody,
     commentary,
-  }: CreateCommentaryDTO.Params): Promise<void> {
+  }: CreateCommentaryDTO.Params): Promise<Commentary> {
     if (!postEmail || !userEmail || !postBody || !commentary) {
       throw new AppError('Faltam dados!');
     }
@@ -38,6 +39,6 @@ export class CreateCommentaryUseCase {
     if (!postFind) {
       throw new AppError('Publicação não encontrada!');
     }
-    this.commentaryRepository.create({ postEmail, userEmail, postBody, commentary });
+    return this.commentaryRepository.create({ postEmail, userEmail, postBody, commentary });
   }
 }

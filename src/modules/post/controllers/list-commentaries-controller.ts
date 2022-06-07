@@ -12,8 +12,8 @@ export class ListCommentariesController {
     const listCommentariesUseCase = new ListCommentariesUseCase(commentaryRepository);
 
     const result = await listCommentariesUseCase.execute({
-      postEmail,
-      postBody,
+      postEmail: postEmail?.toString() ?? ' ',
+      postBody: postBody?.toString() ?? ' ',
     });
 
     return response.status(201).json(result);
