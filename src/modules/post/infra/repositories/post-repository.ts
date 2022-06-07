@@ -35,6 +35,7 @@ export class PostRepository implements IPostRepository {
         const post = {
           email: row.publisher_email,
           content: row.body,
+          name: row.name,
           createdAt: row.created_at,
           nickname: row.nickname,
           updatedAt: row.updated_at,
@@ -69,6 +70,7 @@ export class PostRepository implements IPostRepository {
         const post = {
           email: row.publisher_email,
           content: row.body,
+          name: row.name,
           nickname: row.nickname,
           createdAt: row.created_at,
           updatedAt: row.updated_at,
