@@ -2,6 +2,7 @@ import { query } from '@shared/infra/database/connection';
 
 import { User } from '@user/domain/entities/user';
 import { CreateUserDTO } from '@user/domain/repositories/dtos/create-user-dto';
+import { FindAllUsersByNameOrNicknameDTO } from '@user/domain/repositories/dtos/find-all-by-name-or-nickname-dto';
 import { FindUserByEmailDTO } from '@user/domain/repositories/dtos/find-user-by-email-dto';
 import { FindUserByGithubDTO } from '@user/domain/repositories/dtos/find-user-by-github-dto';
 import { UpdateUserDTO } from '@user/domain/repositories/dtos/update-user-dto';
@@ -47,6 +48,28 @@ export class UserRepository implements IUserRepository {
 
     const findUser = queryRows.length > 0 ? queryRows[0] : null;
     return findUser;
+  }
+
+  async findAllByNameOrNickname({
+    name,
+    nickname,
+  }: FindAllUsersByNameOrNicknameDTO.Params): Promise<FindAllUsersByNameOrNicknameDTO.Result> {
+    const paramsToSearchWithLastComma = `
+      ${name ? `name LIKE '%${name}%',` : ''}
+      ${nickname ? `nickname LIKE '%${nickname}%',` : ''}
+    `;
+
+    // Todos os ternários acima possuem uma vírgula no final, o que causaria um erro na execução da query
+    // A função abaixo utiliza um regex para remover tudo após a última vírgula da string de parâmetros
+    const paramsToSearchWithoutLastComma = paramsToSearchWithLastComma.replace(/,([^,]*)$/, '');
+
+    const queryResponse = await query(
+      `SELECT * FROM users WHERE ${paramsToSearchWithoutLastComma};`
+    );
+
+    const users = queryResponse?.rows;
+
+    return users;
   }
 
   async update({
