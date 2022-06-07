@@ -61,8 +61,8 @@ export class CommentaryRepository implements ICommentaryRepository {
       COMMENTARIES C JOIN USERS U ON U.email = C.user_email
       
        WHERE post_email ='${postEmail}' AND
-       post_body = '${postBody}';
-      
+       post_body = '${postBody}'
+      ORDER BY C.created_at DESC;
     `);
     return response?.rows;
   }
