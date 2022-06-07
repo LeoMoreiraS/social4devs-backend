@@ -19,7 +19,7 @@ export class PostRepository implements IPostRepository {
       (SELECT count(*) from LIKES l where l.post_Email = P.publisher_email AND l.post_body = P.body) as TotalLikes,
       (SELECT count(*) from LIKES li where li.user_Email = '${userEmail}' and li.post_Email = P.publisher_email AND li.post_body = P.body) as liked
       FROM POSTS P JOIN USERS U ON P.publisher_email = U.email WHERE P.publisher_email = '${publisherEmail}'
-      ORDER BY P.created_at DES
+      ORDER BY P.created_at DESC
       ;`
     );
     console.log(response.rows);
@@ -54,7 +54,7 @@ export class PostRepository implements IPostRepository {
     (SELECT count(*) from LIKES l where l.post_Email = P.publisher_email AND l.post_body = P.body) as TotalLikes,
     (SELECT count(*) from LIKES li where li.user_Email = '${userEmail}' and li.post_Email = P.publisher_email AND li.post_body = P.body) as liked
     FROM POSTS P JOIN USERS U ON P.publisher_email = U.email WHERE publisher_email IN (SELECT email_followed FROM  USERS_FOLLOWS where email_follower= '${userEmail}') OR  P.publisher_email = '${userEmail}'
-    ORDER BY P.created_at DES
+    ORDER BY P.created_at DESC
     ;`);
 
     const posts = await Promise.all(
