@@ -14,7 +14,9 @@ app.use(cors());
 app.use(express.json());
 
 app.use(router);
-
+app.get('/', (req, res) => {
+  return res.render('OI');
+});
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 app.use((err: Error, request: Request, response: Response, next: NextFunction) => {
   if (err instanceof AppError) {

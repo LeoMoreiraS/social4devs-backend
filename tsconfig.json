@@ -1,10 +1,11 @@
 {
   "compilerOptions": {
-    "target": "es2016",
-    "module": "commonjs",
+    "target": "es2020",
+    "module": "ES2020",
     "moduleResolution": "node",
     "rootDir": "./",
     "baseUrl": "./src",
+    "outDir": "./dist",
     "paths": {
       "@user/*": ["modules/user/*"],
       "@post/*": ["modules/post/*"],

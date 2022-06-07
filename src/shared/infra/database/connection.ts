@@ -10,6 +10,9 @@ export async function query(query: string): Promise<QueryResult> {
     database: process.env.DB_DATABASE,
     password: process.env.DB_PASSWORD,
     port: 5432,
+    ssl: {
+      rejectUnauthorized: false,
+    },
   });
 
   try {
