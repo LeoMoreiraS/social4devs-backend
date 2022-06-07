@@ -8,7 +8,7 @@ import { IUserFollowRepository } from '@follow/domain/repositories/user-follow-r
 import { User } from '../entities/user';
 import { IUserRepository } from '../repositories/user-repository';
 
-export namespace FindUserWithJoinsUseCaseDTO {
+export namespace GetUserInfoUseCaseDTO {
   export type Params = {
     email: string;
   };
@@ -25,16 +25,14 @@ export namespace FindUserWithJoinsUseCaseDTO {
   };
 }
 
-export class FindUserWithJoinsUseCase {
+export class GetUserInfoUseCase {
   constructor(
     private readonly userRepository: IUserRepository,
     private readonly specialtyRepository: ISpecialtyRepository,
     private readonly userFollowRepository: IUserFollowRepository
   ) {}
 
-  async execute({
-    email,
-  }: FindUserWithJoinsUseCaseDTO.Params): Promise<FindUserWithJoinsUseCaseDTO.Result> {
+  async execute({ email }: GetUserInfoUseCaseDTO.Params): Promise<GetUserInfoUseCaseDTO.Result> {
     if (!email) {
       throw new AppError('Missing param');
     }
@@ -51,13 +49,13 @@ export class FindUserWithJoinsUseCase {
 
     const userFollows = await this.userFollowRepository.findFollows({ email });
 
-    const userWithJoins = {
+    const userInfo = {
       ...user,
       specialties,
       followers: userFollowers,
       follows: userFollows,
     };
 
-    return userWithJoins;
+    return userInfo;
   }
 }
