@@ -8,7 +8,7 @@ import { IUserFollowRepository } from '@follow/domain/repositories/user-follow-r
 import { User } from '../entities/user';
 import { IUserRepository } from '../repositories/user-repository';
 
-export namespace FindUserWithJoinsUseCase {
+export namespace FindUserWithJoinsUseCaseDTO {
   export type Params = {
     email: string;
   };
@@ -34,7 +34,7 @@ export class FindUserWithJoinsUseCase {
 
   async execute({
     email,
-  }: FindUserWithJoinsUseCase.Params): Promise<FindUserWithJoinsUseCase.Result> {
+  }: FindUserWithJoinsUseCaseDTO.Params): Promise<FindUserWithJoinsUseCaseDTO.Result> {
     if (!email) {
       throw new AppError('Missing param');
     }
