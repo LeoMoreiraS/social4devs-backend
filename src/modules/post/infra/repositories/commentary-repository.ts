@@ -27,16 +27,22 @@ export class CommentaryRepository implements ICommentaryRepository {
     userEmail,
     commentary,
   }: CreateCommentaryDTO.Params): Promise<Commentary> {
-    const response = await query(` 
+    await query(` 
       INSERT INTO 
       COMMENTARIES (post_email, post_body, user_email, commentary) 
       VALUES(
        '${postEmail}',
        '${postBody}',
        '${userEmail}',
-       '${commentary}')
-       RETURNING post_email, post_body, user_email, commentary;
+       '${commentary}');
+   
     `);
+    const response = await query(` 
+    SELECT C.*, U.name, U.nickname FROM  
+    COMMENTARIES C JOIN USERS U ON U.email = C.user_email 
+     WHERE post_email ='${postEmail}' AND
+     post_body = '${postBody}' AND commentary = '${commentary}' AND user_email = '${userEmail}'
+  `);
     return response.rows[0];
   }
   async find({
