@@ -2,6 +2,7 @@ import { query } from '@shared/infra/database/connection';
 
 import { User } from '@user/domain/entities/user';
 import { CreateUserDTO } from '@user/domain/repositories/dtos/create-user-dto';
+import { DeleteUserDTO } from '@user/domain/repositories/dtos/delete-user-dto';
 import { FindAllUsersByNameOrNicknameDTO } from '@user/domain/repositories/dtos/find-all-by-name-or-nickname-dto';
 import { FindUserByEmailDTO } from '@user/domain/repositories/dtos/find-user-by-email-dto';
 import { FindUserByGithubDTO } from '@user/domain/repositories/dtos/find-user-by-github-dto';
@@ -94,5 +95,17 @@ export class UserRepository implements IUserRepository {
     const updatedUser: User = userResponse.rows[0];
 
     return updatedUser;
+  }
+
+  async delete({ email }: DeleteUserDTO.Params): Promise<User> {
+    const userResponse = await query(`
+      DELETE FROM users
+      WHERE email = '${email}'
+      RETURNING email, name, bio, nickname, githubAccount;
+    `);
+
+    const deletedUser: User = userResponse.rows[0];
+
+    return deletedUser;
   }
 }

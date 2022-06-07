@@ -1,4 +1,5 @@
 import { CreateUserDTO } from './dtos/create-user-dto';
+import { DeleteUserDTO } from './dtos/delete-user-dto';
 import { FindAllUsersByNameOrNicknameDTO } from './dtos/find-all-by-name-or-nickname-dto';
 import { FindUserByEmailDTO } from './dtos/find-user-by-email-dto';
 import { FindUserByGithubDTO } from './dtos/find-user-by-github-dto';
@@ -12,4 +13,5 @@ export interface IUserRepository {
     params: FindAllUsersByNameOrNicknameDTO.Params
   ): Promise<FindAllUsersByNameOrNicknameDTO.Result>;
   update(params: UpdateUserDTO.Params): Promise<UpdateUserDTO.Result>;
+  delete(params: DeleteUserDTO.Params): Promise<DeleteUserDTO.Result>;
 }
