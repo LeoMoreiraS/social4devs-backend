@@ -12,13 +12,71 @@ export class PostRepository implements IPostRepository {
     );
     return response.rows[0];
   }
-  async list(email: string): Promise<Post[]> {
+  async listByUserPage(publisherEmail: string, userEmail: string): Promise<Post[]> {
     const response = await query(
-      `SELECT *,
-      (SELECT count(*) from LIKES l where l.post_Email = P.publisher_email AND l.post_body = P.body) as TotalLikes
-      FROM POSTS P WHERE publisher_email = '${email}';`
+      `SELECT P.*, U.*,
+      (SELECT count(*) from LIKES l where l.post_Email = P.publisher_email AND l.post_body = P.body) as TotalLikes,
+      (SELECT count(*) from LIKES li where li.user_Email = '${userEmail}' and li.post_Email = P.publisher_email AND li.post_body = P.body) as liked
+      FROM POSTS P JOIN USERS U ON P.publisher_email = U.email WHERE P.publisher_email = '${publisherEmail}';`
     );
-    return response.rows;
+    console.log(response.rows);
+    const posts = await Promise.all(
+      response?.rows.map<Promise<Post>>(async (row) => {
+        const commentaries = await query(`SELECT C.*, U.nickname
+      FROM COMMENTARIES  C JOIN USERS U ON C.user_email = U.email WHERE C.post_email = '${row.publisher_email}' AND C.post_body = '${row.body}'
+      ORDER BY C.created_at;
+      `);
+        const likes = await query(`SELECT L.*, U.nickname
+      FROM LIKES L JOIN USERS U ON L.user_email = U.email WHERE L.post_email = '${row.publisher_email}' AND L.post_body = '${row.body}';
+      `);
+        const post = {
+          email: row.publisher_email,
+          content: row.body,
+          createdAt: row.created_at,
+          nickname: row.nickname,
+          updatedAt: row.updated_at,
+          totalLikes: row.totallikes,
+          liked: row.liked,
+          commentaries: commentaries.rows,
+          likes: likes.rows,
+        };
+        return post;
+      })
+    );
+
+    return posts;
+  }
+  async listMainPage(userEmail: string): Promise<Post[]> {
+    const response = await query(`SELECT *,
+    (SELECT count(*) from LIKES l where l.post_Email = P.publisher_email AND l.post_body = P.body) as TotalLikes,
+    (SELECT count(*) from LIKES li where li.user_Email = '${userEmail}' and li.post_Email = P.publisher_email AND li.post_body = P.body) as liked
+    FROM POSTS P JOIN USERS U ON P.publisher_email = U.email WHERE publisher_email IN (SELECT email_followed FROM  USERS_FOLLOWS where email_follower= '${userEmail}');`);
+
+    const posts = await Promise.all(
+      response?.rows.map<Promise<Post>>(async (row) => {
+        const commentaries = await query(`SELECT C.*, U.nickname
+      FROM COMMENTARIES C JOIN USERS U ON C.user_email = U.email WHERE C.post_email = '${row.publisher_email}' AND C.post_body = '${row.body}'
+      ORDER BY C.created_at;
+      `);
+        const likes = await query(`SELECT L.*, U.nickname
+      FROM LIKES L JOIN USERS U ON L.user_email = U.email WHERE L.post_email = '${row.publisher_email}' AND L.post_body = '${row.body}';
+      `);
+        const post = {
+          email: row.publisher_email,
+          content: row.body,
+          nickname: row.nickname,
+          createdAt: row.created_at,
+          updatedAt: row.updated_at,
+          totalLikes: row.totallikes,
+          liked: row.liked,
+          commentaries: commentaries.rows,
+          likes: likes.rows,
+        };
+        return post;
+      })
+    );
+
+    return posts;
   }
   async create({ email, body }: CreatePostDTO.Params): Promise<Post> {
     const response = await query(`
