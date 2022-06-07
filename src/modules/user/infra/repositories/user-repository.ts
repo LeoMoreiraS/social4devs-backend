@@ -54,17 +54,8 @@ export class UserRepository implements IUserRepository {
     name,
     nickname,
   }: FindAllUsersByNameOrNicknameDTO.Params): Promise<FindAllUsersByNameOrNicknameDTO.Result> {
-    const paramsToSearchWithLastComma = `
-      ${name ? `name LIKE '%${name}%',` : ''}
-      ${nickname ? `nickname LIKE '%${nickname}%',` : ''}
-    `;
-
-    // Todos os ternários acima possuem uma vírgula no final, o que causaria um erro na execução da query
-    // A função abaixo utiliza um regex para remover tudo após a última vírgula da string de parâmetros
-    const paramsToSearchWithoutLastComma = paramsToSearchWithLastComma.replace(/,([^,]*)$/, '');
-
     const queryResponse = await query(
-      `SELECT * FROM users WHERE ${paramsToSearchWithoutLastComma};`
+      `SELECT name, nickname FROM users WHERE name LIKE '%${name}%' OR nickname LIKE '%${nickname}%';`
     );
 
     const users = queryResponse?.rows;
