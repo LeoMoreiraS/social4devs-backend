@@ -39,6 +39,7 @@ export class CreateCommentaryUseCase {
     if (!postFind) {
       throw new AppError('Publicação não encontrada!');
     }
+
     return this.commentaryRepository.create({ postEmail, userEmail, postBody, commentary });
   }
 }

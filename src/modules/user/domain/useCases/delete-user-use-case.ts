@@ -1,3 +1,5 @@
+import { Client } from 'memjs';
+
 import { AppError } from '@shared/errors/app-error';
 
 import { User } from '../entities/user';
@@ -24,6 +26,9 @@ export class DeleteUserUseCase {
     if (!deletedUser) {
       throw new AppError(`Failed to delete user with email '${email}'`);
     }
+    const memcached = Client.create();
+
+    memcached.delete(email);
 
     return deletedUser;
   }

@@ -1,3 +1,5 @@
+import { Client } from 'memjs';
+
 import { AppError } from '@shared/errors/app-error';
 
 import { Specialty } from '@specialty/domain/entities/specialty';
@@ -36,6 +38,17 @@ export class GetUserInfoUseCase {
     if (!email) {
       throw new AppError('Missing param');
     }
+    const memcached = Client.create();
+
+    const userIsCached = await memcached.get(email);
+
+    console.log(userIsCached);
+
+    if (userIsCached.value) {
+      const buff = userIsCached.value.toString();
+      console.log('CACHE DE USERINFO', JSON.parse(buff));
+      return JSON.parse(buff);
+    }
 
     const user = await this.userRepository.findByEmail({ email });
 
@@ -55,6 +68,8 @@ export class GetUserInfoUseCase {
       followers: userFollowers,
       follows: userFollows,
     };
+    console.log('SETANDO CACHE DE USERINFO', userInfo);
+    memcached.set(email, JSON.stringify(userInfo), {});
 
     return userInfo;
   }

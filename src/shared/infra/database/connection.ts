@@ -8,9 +8,6 @@ const pool = new Pool({
   database: process.env.DB_DATABASE,
   password: process.env.DB_PASSWORD,
   port: 5432,
-  ssl: {
-    rejectUnauthorized: false,
-  },
 });
 
 export async function query(query: string): Promise<QueryResult> {
